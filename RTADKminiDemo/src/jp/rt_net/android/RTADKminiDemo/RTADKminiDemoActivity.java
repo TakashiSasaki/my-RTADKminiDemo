@@ -522,6 +522,6 @@ public class RTADKminiDemoActivity extends Activity implements OnClickListener {
 			startActivity(i);
 			break;
 		}
-	}
+	}//onClick
 
-}
+}//RTADKminiDemoActivity
