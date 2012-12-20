@@ -13,19 +13,19 @@ import android.widget.TextView;
 
 public class RTCAMHEAD02Activity extends Activity {
 	
-	//RT-ADKmini‚Æ‚Ìƒf[ƒ^‚Ì‚â‚èæ‚è‚Åg‚¤ƒRƒ}ƒ“ƒh
+	//RT-ADKminiã¨ã®ãƒ‡ãƒ¼ã‚¿ã®ã‚„ã‚Šå–ã‚Šã§ä½¿ã†ã‚³ãƒãƒ³ãƒ‰
 	private static final int USBAccessoryWhat           = 0;
 	public static final int PUSHBUTTON_STATUS_CHANGE	= 2;
    	public static final int SERVO_01 					= 7;
 	public static final int SERVO_02					= 8;
 	
-    //ƒ{ƒ^ƒ“‚Ì‰Ÿ‰ºî•ñæ“¾—p	
+    //ãƒœã‚¿ãƒ³ã®æŠ¼ä¸‹æƒ…å ±å–å¾—ç”¨	
 	public static final int BUTTON_1_PRESSED			= 0x01;
 	public static final int BUTTON_2_PRESSED			= 0x02;
 	public static final int BUTTON_3_PRESSED			= 0x04;
 	public static final int BUTTON_4_PRESSED			= 0x08;
 	
-	//ƒT[ƒ{ƒ‚[ƒ^‚ÌŠp“xî•ñ	
+	//ã‚µãƒ¼ãƒœãƒ¢ãƒ¼ã‚¿ã®è§’åº¦æƒ…å ±	
 	private static int servo01_pos = 0;
 	private static int servo02_pos = 0;
 
@@ -47,27 +47,27 @@ public class RTCAMHEAD02Activity extends Activity {
                	
         accessoryManager = new USBAccessoryManager(handler, USBAccessoryWhat);
         
-       	// ì¬‚µ‚½CameraViewƒNƒ‰ƒX‚ğƒCƒ“ƒXƒ^ƒ“ƒX‰»
+       	// ä½œæˆã—ãŸCameraViewã‚¯ãƒ©ã‚¹ã‚’ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
        	mSurfaceView = (SurfaceView)findViewById(R.id.surface_view);                  
 	    mCameraView = new CameraView(this, mSurfaceView);
         
-        /******* SeekBar1‚Ì’è‹` *******/
+        /******* SeekBar1ã®å®šç¾© *******/
         seekBar1 = (SeekBar) findViewById(R.id.seekBar1);  
         value_of_seekbar1 = (TextView)findViewById(R.id.valueOfseekBar1);
-        // ƒV[ƒNƒo[‚Ì‰Šú’l‚ğTextView‚É•\¦
+        // ã‚·ãƒ¼ã‚¯ãƒãƒ¼ã®åˆæœŸå€¤ã‚’TextViewã«è¡¨ç¤º
         value_of_seekbar1.setText("Current Value:"+seekBar1.getProgress());     
-        //ƒV[ƒNƒo[‚ÌŒ»İ’l,‰Šú’l,ƒZƒJƒ“ƒ_ƒŠ’l‚ğƒZƒbƒg  
+        //ã‚·ãƒ¼ã‚¯ãƒãƒ¼ã®ç¾åœ¨å€¤,åˆæœŸå€¤,ã‚»ã‚«ãƒ³ãƒ€ãƒªå€¤ã‚’ã‚»ãƒƒãƒˆ  
         seekBar1.setMax(255);  
         seekBar1.setProgress(0);  
         seekBar1.setSecondaryProgress(0);  
-        // SeekBar ‚Ì’l‚ª•ÏX‚³‚ê‚½‚Æ‚«‚ÉŒÄ‚Ño‚³‚ê‚éƒR[ƒ‹ƒoƒbƒN‚ğ“o˜^  
+        // SeekBar ã®å€¤ãŒå¤‰æ›´ã•ã‚ŒãŸã¨ãã«å‘¼ã³å‡ºã•ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’ç™»éŒ²  
         seekBar1.setOnSeekBarChangeListener(  
         	new OnSeekBarChangeListener() {  
             
-        	// SeekBar1 ‚Ì’l‚ª•Ï‚í‚Á‚½‚Æ‚«‚Ì“®ì   
+        	// SeekBar1 ã®å€¤ãŒå¤‰ã‚ã£ãŸã¨ãã®å‹•ä½œ   
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch) { 
-        			servo01_pos	= progress;                                  //servo01‚ÌŠp“x‚ÍseekBar‚Ìprogress‚ÅŒˆ‚Ü‚é
-            		value_of_seekbar1.setText("Current Value:"+progress);    //text‚Éseekbar1‚Ì’l‚ğ•\¦
+        			servo01_pos	= progress;                                  //servo01ã®è§’åº¦ã¯seekBarã®progressã§æ±ºã¾ã‚‹
+            		value_of_seekbar1.setText("Current Value:"+progress);    //textã«seekbar1ã®å€¤ã‚’è¡¨ç¤º
             		uiHandler = handler;
             		
             		Message servo01Update = Message.obtain(uiHandler, SERVO_01);
@@ -75,28 +75,28 @@ public class RTCAMHEAD02Activity extends Activity {
             			uiHandler.sendMessage(servo01Update);
             		}	
             }     
-            // SeekBar ‚Ìƒ^ƒbƒ`‚ÌŠJn‚Ì“®ì  
+            // SeekBar ã®ã‚¿ãƒƒãƒã®é–‹å§‹æ™‚ã®å‹•ä½œ  
             public void onStartTrackingTouch(SeekBar seekBar) {  
             }        
-            // SeekBar ‚Ìƒ^ƒbƒ`‚ÌI—¹‚Ì“®ì  
+            // SeekBar ã®ã‚¿ãƒƒãƒã®çµ‚äº†æ™‚ã®å‹•ä½œ  
             public void onStopTrackingTouch(SeekBar seekBar) {  
             }  
           }  
         );  
         
-        /******* SeekBar2’è‹` *******/
+        /******* SeekBar2å®šç¾© *******/
         seekBar2 = (SeekBar)findViewById(R.id.seekBar2);  
         value_of_seekbar2 = (TextView)findViewById(R.id.valueOfseekBar2);
-        // ƒV[ƒNƒo[‚Ì‰Šú’l‚ğTextView‚É•\¦
+        // ã‚·ãƒ¼ã‚¯ãƒãƒ¼ã®åˆæœŸå€¤ã‚’TextViewã«è¡¨ç¤º
         value_of_seekbar2.setText("Current Value:"+seekBar2.getProgress());     
-        //ƒV[ƒNƒo[‚ÌŒ»İ’l,‰Šú’l,ƒZƒJƒ“ƒ_ƒŠ’l‚ğƒZƒbƒg  
+        //ã‚·ãƒ¼ã‚¯ãƒãƒ¼ã®ç¾åœ¨å€¤,åˆæœŸå€¤,ã‚»ã‚«ãƒ³ãƒ€ãƒªå€¤ã‚’ã‚»ãƒƒãƒˆ  
         seekBar2.setMax(255);  
         seekBar2.setProgress(0);  
         seekBar2.setSecondaryProgress(0);  
-        // SeekBar ‚Ì’l‚ª•ÏX‚³‚ê‚½‚Æ‚«‚ÉŒÄ‚Ño‚³‚ê‚éƒR[ƒ‹ƒoƒbƒN‚ğ“o˜^  
+        // SeekBar ã®å€¤ãŒå¤‰æ›´ã•ã‚ŒãŸã¨ãã«å‘¼ã³å‡ºã•ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’ç™»éŒ²  
         seekBar2.setOnSeekBarChangeListener(  
         	new OnSeekBarChangeListener() {  
-            // SeekBar2 ‚Ì’l‚ª•Ï‚í‚Á‚½‚Æ‚«‚Ì“®ì   
+            // SeekBar2 ã®å€¤ãŒå¤‰ã‚ã£ãŸã¨ãã®å‹•ä½œ   
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch) { 
         			servo02_pos	= progress;
             		value_of_seekbar2.setText("Current Value:"+progress);
@@ -108,34 +108,34 @@ public class RTCAMHEAD02Activity extends Activity {
             		}
             }  
       
-            // SeekBar ‚Ìƒ^ƒbƒ`‚ÌŠJn‚Ì“®ì  
+            // SeekBar ã®ã‚¿ãƒƒãƒã®é–‹å§‹æ™‚ã®å‹•ä½œ  
             public void onStartTrackingTouch(SeekBar seekBar) {  
             }        
-            // SeekBar ‚Ìƒ^ƒbƒ`‚ÌI—¹‚Ì“®ì  
+            // SeekBar ã®ã‚¿ãƒƒãƒã®çµ‚äº†æ™‚ã®å‹•ä½œ  
             public void onStopTrackingTouch(SeekBar seekBar) {  
             }  
         });
       
-        /******* originƒ{ƒ^ƒ“‚Ì’è‹` *******/
+        /******* originãƒœã‚¿ãƒ³ã®å®šç¾© *******/
 	    button1 = (Button) findViewById(R.id.OriginButton);
         
 	    button1.setOnClickListener(new View.OnClickListener() {
 	        @Override
 	        public void onClick(View v) {  
-	            // originƒ{ƒ^ƒ“‚ªƒNƒŠƒbƒN‚³‚ê‚½‚ÉŒÄ‚Ño‚³‚ê‚é
-        		seekBar1.setProgress(127);//ƒT[ƒ{01‚ğ‹­§“I‚ÉŒ´“_‚É–ß‚·
-        		seekBar2.setProgress(127);//ƒT[ƒ{02‚ğ‹­§“I‚ÉŒ´“_‚É–ß‚·
+	            // originãƒœã‚¿ãƒ³ãŒã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸæ™‚ã«å‘¼ã³å‡ºã•ã‚Œã‚‹
+        		seekBar1.setProgress(127);//ã‚µãƒ¼ãƒœ01ã‚’å¼·åˆ¶çš„ã«åŸç‚¹ã«æˆ»ã™
+        		seekBar2.setProgress(127);//ã‚µãƒ¼ãƒœ02ã‚’å¼·åˆ¶çš„ã«åŸç‚¹ã«æˆ»ã™
 	        }
 	    });
        
-	    /******* CamChangeƒ{ƒ^ƒ“‚Ì’è‹` *******/ 
+	    /******* CamChangeãƒœã‚¿ãƒ³ã®å®šç¾© *******/ 
         button2 = (Button) findViewById(R.id.CamChangeButton);
         
 	    button2.setOnClickListener(new View.OnClickListener() {
 	        @Override
 	        public void onClick(View v) {  
-	             // CamChangeƒ{ƒ^ƒ“‚ªƒNƒŠƒbƒN‚³‚ê‚½‚ÉŒÄ‚Ño‚³‚ê‚é
-	        	 mCameraView.cameraChange();     //ƒJƒƒ‰‚Ì“àŠO‚ğØ‚è‘Ö‚¦‚é
+	             // CamChangeãƒœã‚¿ãƒ³ãŒã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸæ™‚ã«å‘¼ã³å‡ºã•ã‚Œã‚‹
+	        	 mCameraView.cameraChange();     //ã‚«ãƒ¡ãƒ©ã®å†…å¤–ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹
 	        }
 	    }); 	
 	
@@ -144,7 +144,7 @@ public class RTCAMHEAD02Activity extends Activity {
 	@Override
 	public void onStart() {
 		super.onStart();
-		this.setTitle("RT-ADKmini ƒfƒoƒCƒX‚ªÚ‘±‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+		this.setTitle("RT-ADKmini ãƒ‡ãƒã‚¤ã‚¹ãŒæ¥ç¶šã•ã‚Œã¦ã„ã¾ã›ã‚“");
 		
 	}
 	
@@ -161,12 +161,12 @@ public class RTCAMHEAD02Activity extends Activity {
     	disconnectAccessory();
     }
     
-    //RT-ADKmini‚ª–¢Ú‘±‚ÉŒÄ‚Î‚ê‚é
+    //RT-ADKminiãŒæœªæ¥ç¶šæ™‚ã«å‘¼ã°ã‚Œã‚‹
     public void disconnectAccessory() {
-    	this.setTitle("RT-ADKmini ƒfƒoƒCƒX‚ªÚ‘±‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");    
+    	this.setTitle("RT-ADKmini ãƒ‡ãƒã‚¤ã‚¹ãŒæ¥ç¶šã•ã‚Œã¦ã„ã¾ã›ã‚“");    
     }
     
-    /******* USB Manager thread@‚Ü‚½‚Í UI‚©‚ç‚Ì message‚ğó‚¯æ‚èˆ—‚·‚éhandler*******/
+    /******* USB Manager threadã€€ã¾ãŸã¯ UIã‹ã‚‰ã® messageã‚’å—ã‘å–ã‚Šå‡¦ç†ã™ã‚‹handler*******/
     private Handler handler = new Handler() {
     	@Override
     	public void handleMessage(Message msg) {
@@ -201,15 +201,15 @@ public class RTCAMHEAD02Activity extends Activity {
 							
 							while(true) {
 								if(accessoryManager.available() < 2) {
-									//ƒRƒ}ƒ“ƒh‚ÌÅ‘åƒTƒCƒY‚Í2byte‚È‚Ì‚Åƒoƒbƒtƒ@‚ÌƒTƒCƒY‚ª2btye‚æ‚è¬‚³‚­‚È‚Á‚½‚ç”²‚¯‚é
+									//ã‚³ãƒãƒ³ãƒ‰ã®æœ€å¤§ã‚µã‚¤ã‚ºã¯2byteãªã®ã§ãƒãƒƒãƒ•ã‚¡ã®ã‚µã‚¤ã‚ºãŒ2btyeã‚ˆã‚Šå°ã•ããªã£ãŸã‚‰æŠœã‘ã‚‹
 									break;
 								}
 							    
-								//commandPacket‚Éƒoƒbƒtƒ@‚Ìƒf[ƒ^‚ğ‘‚«‚İ,“Ç‚İ‚ñ‚¾ƒf[ƒ^‚ğÁ‹‚·‚é
+								//commandPacketã«ãƒãƒƒãƒ•ã‚¡ã®ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã¿,èª­ã¿è¾¼ã‚“ã ãƒ‡ãƒ¼ã‚¿ã‚’æ¶ˆå»ã™ã‚‹
 								accessoryManager.read(commandPacket);
 								
 								switch(commandPacket[0]) {
-									//DIN0,1,2,3‚ÉŒq‚ª‚Á‚Ä‚¢‚éƒ^ƒNƒgƒXƒCƒbƒ`‚ª‰Ÿ‚³‚ê‚½‚Ìˆ—
+									//DIN0,1,2,3ã«ç¹‹ãŒã£ã¦ã„ã‚‹ã‚¿ã‚¯ãƒˆã‚¹ã‚¤ãƒƒãƒãŒæŠ¼ã•ã‚ŒãŸæ™‚ã®å‡¦ç†
 								    case PUSHBUTTON_STATUS_CHANGE:
 						    			if( (commandPacket[1] & BUTTON_1_PRESSED) == BUTTON_1_PRESSED ){
 						    				servo01_pos +=10;  
@@ -238,7 +238,7 @@ public class RTCAMHEAD02Activity extends Activity {
 						case CONNECTED:
 							break;
 						case READY:
-							setTitle("RT-ADKmini ƒfƒoƒCƒX‚ªÚ‘±‚³‚ê‚Ü‚µ‚½");
+							setTitle("RT-ADKmini ãƒ‡ãƒã‚¤ã‚¹ãŒæ¥ç¶šã•ã‚Œã¾ã—ãŸ");
 							break;
 						case DISCONNECTED:
 							disconnectAccessory();
