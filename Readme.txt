@@ -1,30 +1,30 @@
-��RTCAMHEAD�T���v���\�[�X��
+≪RTCAMHEADサンプルソース≫
 
-�E�͂��߂�
-  �{�T���v���\�[�X��RT-CAMHEAD�p�̂��̂ł��B���̃T���v���ł�Android�[��
-�@�̉�ʂɃJ�����̉f����\����,��ʏ�̃V�[�N�o�[�ŃT�[�{���[�^�̊p�x
-�@���R���g���[�����邱�Ƃ��ł��܂��B
+・はじめに
+  本サンプルソースはRT-CAMHEAD用のものです。このサンプルではAndroid端末
+　の画面にカメラの映像を表示し,画面上のシークバーでサーボモータの角度
+　をコントロールすることができます。
   
 
-�E�t�@�C���\��
-�@RTCAMHEAD02�@�@�@     (Android���\�[�X�t�@�C��)
-�@RTADKminiDemo         (Android���\�[�X�t�@�C��)
-  RTADKminiDemoPIC      (PIC���\�[�X�t�@�C��)
-  Readme.txt�@�@�@      (���̐����t�@�C��)
-�@RTADKminiDemo�d�l.txt (PIC���\�[�X�t�@�C���̐���)�@
+・ファイル構成
+　RTCAMHEAD02　　　     (Android側ソースファイル)
+　RTADKminiDemo         (Android側ソースファイル)
+  RTADKminiDemoPIC      (PIC側ソースファイル)
+  Readme.txt　　　      (この説明ファイル)
+　RTADKminiDemo仕様.txt (PIC側ソースファイルの説明)　
 
-�E�J����
-  Android���̊J������eclipse�ɂȂ�܂��B
-  PIC���̊J������MPLABX�ɂȂ�܂��B
-�E�g�p���@
-�@�e�t�@�C����eclipse�܂���MPLABX�Ɏ�荞��ł��������B
+・開発環境
+  Android側の開発環境はeclipseになります。
+  PIC側の開発環境はMPLABXになります。
+・使用方法
+　各ファイルをeclipseまたはMPLABXに取り込んでください。
 
-�E����
-�@RT-ADKmini��DIN0,DIN1,DIN2,DIN3�s���̓v���A�b�v��R�����3.3V��
-�@�s���ɂȂ��ł��������B�����̃s���ɂ����^�N�g�X�C�b�`������
-�@�ƃT�[�{���[�^�̊p�x��ς��邱�Ƃ��ł��܂��B�^�N�g�X�C�b�`���g��Ȃ�
-�@�Ƃ����K��DIN0,DIN1,DIN2,DIN3�s���̓v���A�b�v���Ă��������B
-�@
---�ȏ�--
+・注意
+　RT-ADKminiのDIN0,DIN1,DIN2,DIN3ピンはプルアップ抵抗を介して3.3Vの
+　ピンにつないでください。これらのピンにつけたタクトスイッチを押す
+　とサーボモータの角度を変えることができます。タクトスイッチを使わない
+　ときも必ずDIN0,DIN1,DIN2,DIN3ピンはプルアップしてください。
+　
+--以上--
 
 
