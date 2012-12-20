@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-   
-    <string name="app_name">RTADKminiDemo</string>
+    <string name="app_name">igum2013Project</string>
     
     <string name="DOUT_header">Digital Output</string>
     <string name="AOUT_header">Analog Output</string>
