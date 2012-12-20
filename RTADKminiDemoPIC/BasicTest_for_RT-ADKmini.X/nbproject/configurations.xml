@@ -14,15 +14,17 @@
                      projectFiles="true">
         <itemPath>../HardwareProfile - PIC24FJ64GB002.h</itemPath>
       </logicalFolder>
-      <logicalFolder name="USB Stack" displayName="USB Stack" projectFiles="true">
-        <itemPath>../Include/USB/usb.h</itemPath>
-        <itemPath>../Include/USB/usb_ch9.h</itemPath>
-        <itemPath>../Include/USB/usb_common.h</itemPath>
-        <itemPath>../Include/USB/usb_hal.h</itemPath>
-        <itemPath>../Include/USB/usb_hal_pic24.h</itemPath>
-        <itemPath>../Include/USB/usb_hal_pic32.h</itemPath>
-        <itemPath>../Include/USB/usb_host.h</itemPath>
-        <itemPath>../Include/USB/usb_host_android.h</itemPath>
+      <logicalFolder name="Include" displayName="Include" projectFiles="true">
+        <logicalFolder name="USB" displayName="USB" projectFiles="true">
+          <itemPath>../Include/USB/usb.h</itemPath>
+          <itemPath>../Include/USB/usb_ch9.h</itemPath>
+          <itemPath>../Include/USB/usb_common.h</itemPath>
+          <itemPath>../Include/USB/usb_hal.h</itemPath>
+          <itemPath>../Include/USB/usb_hal_pic24.h</itemPath>
+          <itemPath>../Include/USB/usb_hal_pic32.h</itemPath>
+          <itemPath>../Include/USB/usb_host.h</itemPath>
+          <itemPath>../Include/USB/usb_host_android.h</itemPath>
+        </logicalFolder>
       </logicalFolder>
       <itemPath>../usb_config.h</itemPath>
     </logicalFolder>
@@ -51,6 +53,7 @@
         <developmentServer>localhost</developmentServer>
         <targetDevice>PIC24FJ64GB002</targetDevice>
         <targetHeader></targetHeader>
+        <targetPluginBoard></targetPluginBoard>
         <platformTool>PICkit3PlatformTool</platformTool>
         <languageToolchain>C30</languageToolchain>
         <languageToolchainVersion>3_30b</languageToolchainVersion>
@@ -62,15 +65,19 @@
             <linkerLibFileItem>../Android C30-coff.a</linkerLibFileItem>
           </linkerLibItems>
         </linkerTool>
+        <loading>
+          <useAlternateLoadableFile>false</useAlternateLoadableFile>
+          <alternateLoadableFile></alternateLoadableFile>
+        </loading>
       </compileType>
       <makeCustomizationType>
         <makeCustomizationPreStepEnabled>true</makeCustomizationPreStepEnabled>
         <makeCustomizationPreStep></makeCustomizationPreStep>
         <makeCustomizationPostStepEnabled>true</makeCustomizationPostStepEnabled>
         <makeCustomizationPostStep></makeCustomizationPostStep>
-        <makeCustomizationAlternativeFileToLoadEnabled>false</makeCustomizationAlternativeFileToLoadEnabled>
-        <makeCustomizationAlternativeFileToLoad></makeCustomizationAlternativeFileToLoad>
         <makeCustomizationPutChecksumInUserID>false</makeCustomizationPutChecksumInUserID>
+        <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
+        <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
       <C30>
         <property key="code-model" value="default"/>
