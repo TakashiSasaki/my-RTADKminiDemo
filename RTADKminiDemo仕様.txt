@@ -1,0 +1,27 @@
+<<RTADKminiDemo仕様>>
+
+このファームウェアはRTADKmini用です。Microchip社より公開されている
+ADK用ファームウェアをもとに構成してあります。
+このファームウェアでできることは以下になります。
+  
+    ・DOUT0,DOUT1,DOUT2,DOUT3ピンをデジタル出力として使用   
+　　  Android側からピンをLOWかHIGHに変更可能
+　
+    ・DIN0,DIN1,DIN2,DIN3ピンをデジタル入力として使用       
+　  　Android側にピンがLOWかHIGHかを送信
+  
+    ・AOUT0,AOUT1ピンをアナログ出力(PWM)として使用          
+　　  Android側からPWMを出力するか否かを変更可能
+　
+    ・AIN0,AIN1,AIN2,AIN3ピンをアナログ入力として使用
+　　  ADの読み取り値をAndroid側に送信
+
+    ・双葉電子工業製サーボモータのRS301,RS302をコントロール
+      Android側からの角度情報を受け取ってサーボモータをコントロール
+
+
+このファームウェアでは、2byteのデータをAndroidとやり取りをしています。
+やり取りするデータの1byte目はデータの種類、2byte目はデータの中身になります。
+
+
+ 

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+   
+    <string name="app_name">RTADKminiDemo</string>
+    
+    <string name="DOUT_header">Digital Output</string>
+    <string name="AOUT_header">Analog Output</string>
+    <string name="button_header">Push Button Status</string>
+    <string name="pot_header">Analog Input</string>
+    <string name="ServoControl_header">Servo Control</string>
+    
+    
+    
+    <string name="button_1">Button 1(DIN0):</string>
+    <string name="button_2">Button 2(DIN1):</string>
+    <string name="button_3">Button 3(DIN2):</string>
+    <string name="button_4">Button 4(DIN3):</string>
+    
+    <string name="not_pressed">Not pressed.</string>
+    <string name="pressed">Pressed.</string>
+    
+</resources>
+

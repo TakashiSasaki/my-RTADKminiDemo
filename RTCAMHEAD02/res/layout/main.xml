@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    >
+
+    <SurfaceView
+        android:id="@+id/surface_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+    </SurfaceView>
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:baselineAligned="false"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="bottom" 
+            android:layout_weight="1">
+        
+            <TextView
+            android:id="@+id/valueOfseekBar1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Value:"
+            android:textSize="10dip">
+	        </TextView>
+	        
+	        <SeekBar
+	            android:id="@+id/seekBar1"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content">
+	        </SeekBar>
+	        
+	        <TextView
+	            android:id="@+id/valueOfseekBar2"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Value:"
+	            android:textSize="10dip">
+	        </TextView>
+	        
+	        <SeekBar
+	            android:id="@+id/seekBar2"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content">
+	        </SeekBar> 
+        
+        
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="bottom"
+             >
+        
+	        <Button
+	            android:id="@+id/OriginButton"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:text="Origin" >
+	        </Button>
+	
+	        <Button
+	            android:id="@+id/CamChangeButton"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:text="CamChange" >
+	        </Button> 
+        </LinearLayout>
+    
+    </LinearLayout>
+
+</FrameLayout>
