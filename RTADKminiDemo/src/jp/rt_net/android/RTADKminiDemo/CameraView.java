@@ -33,6 +33,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 			camera.setPreviewDisplay(holder);
 
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 	}

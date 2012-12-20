@@ -1,7 +1,7 @@
 package jp.rt_net.android.RTADKminiDemo;
 
 
-import com.example.igum2013project.R;
+import jp.rt_net.android.RTADKminiDemo.R;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.content.Intent;
 
-public class RTCAMHEAD02Activity extends Activity implements OnClickListener {
+public class RTCAMHEAD02Activity extends Activity {
 
 	// RT-ADKminiとのデータのやり取りで使うコマンド
 	private static final int USBAccessoryWhat = 0;
@@ -136,17 +136,17 @@ public class RTCAMHEAD02Activity extends Activity implements OnClickListener {
 		});
 
 		/******* CamChangeボタンの定義 *******/
-		button2.setOnClickListener(this);
-		
-		/*button2 = (Button) findViewById(R.id.CamChangeButton);
+		button2 = (Button) findViewById(R.id.CamChangeButton);
 
 		button2.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// CamChangeボタンがクリックされた時に呼び出される
-				mCameraView.cameraChange(); // カメラの内外を切り替える
+				//mCameraView.cameraChange(); // カメラの内外を切り替える
+				Intent i = new Intent(getApplicationContext(), RTADKminiDemoActivity.class);
+				startActivity(i);
 			}
-		});*/
+		});
 
 
 		
@@ -267,13 +267,4 @@ public class RTCAMHEAD02Activity extends Activity implements OnClickListener {
 		} // handleMessage
 	}; // handler
 
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.button2:
-			Intent i = new Intent(this, RTADKminiDemoActivity.class);
-			startActivity(i);
-			break;
-		}
-	}
-	
 }

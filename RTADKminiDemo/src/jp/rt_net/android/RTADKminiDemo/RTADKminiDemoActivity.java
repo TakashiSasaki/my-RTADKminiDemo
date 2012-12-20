@@ -1,6 +1,6 @@
 package jp.rt_net.android.RTADKminiDemo;
 
-import com.example.igum2013project.R;
+import jp.rt_net.android.RTADKminiDemo.R;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -17,7 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-public class RTADKminiDemoActivity extends Activity implements OnClickListener {
+public class RTADKminiDemoActivity extends Activity {
 	private final static int USBAccessoryWhat = 0;
 
 	public static final int UPDATE_OUTPUTPIN_SETTING = 1;
@@ -70,8 +70,20 @@ public class RTADKminiDemoActivity extends Activity implements OnClickListener {
 
 		this.setContentView(R.layout.main);
 
-		View button5 = findViewById(R.id.button5);
-		button5.setOnClickListener(this);
+		Button button5 = (Button) findViewById(R.id.button5);
+		button5.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				switch (v.getId()) {
+				case R.id.button5:
+					Intent i = new Intent(getApplicationContext(),
+							RTCAMHEAD02Activity.class);
+					startActivity(i);
+					break;
+				}
+			}
+		});
 
 		Log.i("i", "aaa");
 
@@ -515,13 +527,4 @@ public class RTADKminiDemoActivity extends Activity implements OnClickListener {
 		return buttonText.equals(getString(R.string.pressed));
 	}
 
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.button5:
-			Intent i = new Intent(this, RTCAMHEAD02Activity.class);
-			startActivity(i);
-			break;
-		}
-	}//onClick
-
-}//RTADKminiDemoActivity
+}// RTADKminiDemoActivity

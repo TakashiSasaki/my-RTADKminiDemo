@@ -1,6 +1,6 @@
 package jp.rt_net.android.RTADKminiDemo;
 
-import com.example.igum2013project.R;
+import jp.rt_net.android.RTADKminiDemo.R;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Handler;
