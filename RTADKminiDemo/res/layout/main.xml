@@ -145,7 +145,15 @@ android:background='@color/white'
 			    android:layout_height="wrap_content"
 			    android:textColor="@color/black"
 			    android:text="AOUT0" />
-	
+			
+			<Button
+	            android:id="@+id/button5"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="button5" >
+	        </Button> 
+			
+			
 			<view
 			class="jp.rt_net.android.RTADKminiDemo.LEDControl"
 			android:id="@+id/led_4"
