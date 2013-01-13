@@ -1,6 +1,5 @@
 package jp.rt_net.android.RTADKminiDemo;
 
-
 import jp.rt_net.android.RTADKminiDemo.R;
 
 import android.app.Activity;
@@ -142,14 +141,13 @@ public class RTCAMHEAD02Activity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// CamChangeボタンがクリックされた時に呼び出される
-				//mCameraView.cameraChange(); // カメラの内外を切り替える
-				Intent i = new Intent(getApplicationContext(), RTADKminiDemoActivity.class);
+				// mCameraView.cameraChange(); // カメラの内外を切り替える
+				Intent i = new Intent(getApplicationContext(),
+						RTADKminiDemoActivity.class);
 				startActivity(i);
 			}
 		});
 
-
-		
 	}// onCreate
 
 	@Override
