@@ -43,15 +43,15 @@ public class RTADKminiDemoActivity extends Activity {
 	public static final int BUTTON_3_PRESSED = 0x04;
 	public static final int BUTTON_4_PRESSED = 0x08;
 
-	private int servo01_pos = 0;
-	private int servo02_pos = 0;
-	private USBAccessoryManager accessoryManager;
+	int servo01_pos = 0;
+	int servo02_pos = 0;
+	USBAccessoryManager accessoryManager;
 
 	SeekBar seekBar1, seekBar2;
 	TextView value_of_seekbar1;
 	TextView value_of_seekbar2;
 
-	private Handler uiHandler;
+	Handler uiHandler;
 
 	// private Button button5;
 
@@ -87,31 +87,33 @@ public class RTADKminiDemoActivity extends Activity {
 
 		Log.i("i", "aaa");
 
-		accessoryManager = new USBAccessoryManager(handler, USBAccessoryWhat);
+		this.accessoryManager = new USBAccessoryManager(this.handler,
+				USBAccessoryWhat);
 
 		try {
 			// Set the link to the message handler for this class
 			LEDControl ledControl;
 
 			ledControl = ((LEDControl) findViewById(R.id.led_0));
-			ledControl.setHandler(handler);
+			ledControl.setHandler(this.handler);
 
 			ledControl = ((LEDControl) findViewById(R.id.led_1));
-			ledControl.setHandler(handler);
+			ledControl.setHandler(this.handler);
 
 			ledControl = ((LEDControl) findViewById(R.id.led_2));
-			ledControl.setHandler(handler);
+			ledControl.setHandler(this.handler);
 
 			ledControl = ((LEDControl) findViewById(R.id.led_3));
-			ledControl.setHandler(handler);
+			ledControl.setHandler(this.handler);
 
 			ledControl = ((LEDControl) findViewById(R.id.led_4));
-			ledControl.setHandler(handler);
+			ledControl.setHandler(this.handler);
 
 			ledControl = ((LEDControl) findViewById(R.id.led_5));
-			ledControl.setHandler(handler);
+			ledControl.setHandler(this.handler);
 
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		// Restore UI state from the savedInstanceState
@@ -167,59 +169,73 @@ public class RTADKminiDemoActivity extends Activity {
 		}
 		Log.i("i", "bbb");
 		// Definition of SeekBar1
-		seekBar1 = (SeekBar) findViewById(R.id.seekBar1);
-		value_of_seekbar1 = (TextView) findViewById(R.id.TextView7);
-		value_of_seekbar1.setText("Current Value:" + seekBar1.getProgress());
-		seekBar1.setMax(255);
-		seekBar1.setProgress(0);
-		seekBar1.setSecondaryProgress(0);
-		seekBar1.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+		this.seekBar1 = (SeekBar) findViewById(R.id.seekBar1);
+		this.value_of_seekbar1 = (TextView) findViewById(R.id.TextView7);
+		this.value_of_seekbar1.setText("Current Value:"
+				+ this.seekBar1.getProgress());
+		this.seekBar1.setMax(255);
+		this.seekBar1.setProgress(0);
+		this.seekBar1.setSecondaryProgress(0);
+		this.seekBar1.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
+			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromTouch) {
-				servo01_pos = progress;
-				value_of_seekbar1.setText("Current Value:" + progress);
-				uiHandler = handler;
+				RTADKminiDemoActivity.this.servo01_pos = progress;
+				RTADKminiDemoActivity.this.value_of_seekbar1
+						.setText("Current Value:" + progress);
+				RTADKminiDemoActivity.this.uiHandler = RTADKminiDemoActivity.this.handler;
 
-				Message servo01Update = Message.obtain(uiHandler, SERVO_01);
-				if (uiHandler != null) {
-					uiHandler.sendMessage(servo01Update);
+				Message servo01Update = Message.obtain(
+						RTADKminiDemoActivity.this.uiHandler, SERVO_01);
+				if (RTADKminiDemoActivity.this.uiHandler != null) {
+					RTADKminiDemoActivity.this.uiHandler
+							.sendMessage(servo01Update);
 				}
 
 			}
 
+			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) {
 			}
 
+			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
 			}
 		});
 
 		// //////////////////////////////
 		// Definition of SeekBar2
-		seekBar2 = (SeekBar) findViewById(R.id.seekBar2);
-		value_of_seekbar2 = (TextView) findViewById(R.id.TextView8);
-		value_of_seekbar2.setText("Current Value:" + seekBar2.getProgress());
-		seekBar2.setMax(255);
-		seekBar2.setProgress(0);
-		seekBar2.setSecondaryProgress(0);
-		seekBar2.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+		this.seekBar2 = (SeekBar) findViewById(R.id.seekBar2);
+		this.value_of_seekbar2 = (TextView) findViewById(R.id.TextView8);
+		this.value_of_seekbar2.setText("Current Value:"
+				+ this.seekBar2.getProgress());
+		this.seekBar2.setMax(255);
+		this.seekBar2.setProgress(0);
+		this.seekBar2.setSecondaryProgress(0);
+		this.seekBar2.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromTouch) {
-				servo02_pos = progress;
-				value_of_seekbar2.setText("Current Value:" + progress);
-				uiHandler = handler;
+				RTADKminiDemoActivity.this.servo02_pos = progress;
+				RTADKminiDemoActivity.this.value_of_seekbar2
+						.setText("Current Value:" + progress);
+				RTADKminiDemoActivity.this.uiHandler = RTADKminiDemoActivity.this.handler;
 
-				Message servo02Update = Message.obtain(uiHandler, SERVO_02);
-				if (uiHandler != null) {
-					uiHandler.sendMessage(servo02Update);
+				Message servo02Update = Message.obtain(
+						RTADKminiDemoActivity.this.uiHandler, SERVO_02);
+				if (RTADKminiDemoActivity.this.uiHandler != null) {
+					RTADKminiDemoActivity.this.uiHandler
+							.sendMessage(servo02Update);
 				}
 
 			}
 
+			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) {
 			}
 
+			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
 			}
 		});
@@ -235,7 +251,7 @@ public class RTADKminiDemoActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		accessoryManager.enable(this, getIntent());
+		this.accessoryManager.enable(this, getIntent());
 	}
 
 	@Override
@@ -282,7 +298,7 @@ public class RTADKminiDemoActivity extends Activity {
 	@Override
 	public void onPause() {
 		super.onPause();
-		accessoryManager.disable(this);
+		this.accessoryManager.disable(this);
 		disconnectAccessory();
 	}
 
@@ -339,25 +355,27 @@ public class RTADKminiDemoActivity extends Activity {
 
 			switch (msg.what) {
 			case SERVO_01:
-				if (accessoryManager.isConnected() == false) {
+				if (RTADKminiDemoActivity.this.accessoryManager.isConnected() == false) {
 					return;
 				}
 
 				commandPacket[0] = SERVO_01;
-				commandPacket[1] = (byte) servo01_pos;
-				accessoryManager.write(commandPacket);
+				commandPacket[1] = (byte) RTADKminiDemoActivity.this.servo01_pos;
+				RTADKminiDemoActivity.this.accessoryManager
+						.write(commandPacket);
 				break;
 			case SERVO_02:
-				if (accessoryManager.isConnected() == false) {
+				if (RTADKminiDemoActivity.this.accessoryManager.isConnected() == false) {
 					return;
 				}
 
 				commandPacket[0] = SERVO_02;
-				commandPacket[1] = (byte) servo02_pos;
-				accessoryManager.write(commandPacket);
+				commandPacket[1] = (byte) RTADKminiDemoActivity.this.servo02_pos;
+				RTADKminiDemoActivity.this.accessoryManager
+						.write(commandPacket);
 				break;
 			case UPDATE_OUTPUTPIN_SETTING:
-				if (accessoryManager.isConnected() == false) {
+				if (RTADKminiDemoActivity.this.accessoryManager.isConnected() == false) {
 					return;
 				}
 
@@ -388,25 +406,29 @@ public class RTADKminiDemoActivity extends Activity {
 					commandPacket[1] |= LED_5_ON;
 				}
 
-				accessoryManager.write(commandPacket);
+				RTADKminiDemoActivity.this.accessoryManager
+						.write(commandPacket);
 				break;
 
 			case USBAccessoryWhat:
 				switch (((USBAccessoryManagerMessage) msg.obj).type) {
 				case READ:
-					if (accessoryManager.isConnected() == false) {
+					if (RTADKminiDemoActivity.this.accessoryManager
+							.isConnected() == false) {
 						return;
 					}
 
 					while (true) {
-						if (accessoryManager.available() < 2) {
+						if (RTADKminiDemoActivity.this.accessoryManager
+								.available() < 2) {
 							// All of our commands in this example are 2 bytes.
 							// If there are less
 							// than 2 bytes left, it is a partial command
 							break;
 						}
 
-						accessoryManager.read(commandPacket);
+						RTADKminiDemoActivity.this.accessoryManager
+								.read(commandPacket);
 						int value;
 						value = 0x000000FF & ((int) (commandPacket[1]));
 
@@ -502,7 +524,7 @@ public class RTADKminiDemoActivity extends Activity {
 		} // handleMessage
 	}; // handler
 
-	private void updateButton(int id, boolean pressed) {
+	void updateButton(int id, boolean pressed) {
 		TextView textviewToUpdate;
 		LinearLayout layoutToUpdate;
 
