@@ -1,5 +1,7 @@
 package jp.rt_net.android.RTADKminiDemo;
 
+import java.io.IOException;
+
 import jp.rt_net.android.RTADKminiDemo.R;
 
 import android.app.Activity;
@@ -48,7 +50,7 @@ public class RTCAMHEAD02Activity extends Activity {
 	private Button button1, button2;
 
 	// network thread
-	HttpServerThread httpServerThread;
+	HelloServerThread helloServerThread;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -169,7 +171,12 @@ public class RTCAMHEAD02Activity extends Activity {
 			}
 		});
 
-		// this.httpServerThread = new HttpServerThread(this);
+		try {
+			this.helloServerThread = new HelloServerThread();
+			this.helloServerThread.start();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}// onCreate
 
