@@ -23,39 +23,38 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
 		// プッシュ・バッファの指定
 		this.holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-	}
+	}// a constructor
 
 	// サーフェス生成イベントの処理
 	@Override
-	public void surfaceCreated(SurfaceHolder holder) {
+	public void surfaceCreated(SurfaceHolder holder1) {
 		// カメラの初期化
 		try {
 			this.camera = Camera.open(this.cameraId);
-			this.camera.setPreviewDisplay(holder);
+			this.camera.setPreviewDisplay(holder1);
 
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-
-	}
+		}// try
+	}// surfaceCreated
 
 	// サーフェス変更イベントの処理
 	@Override
-	public void surfaceChanged(SurfaceHolder holder, int format, int width,
+	public void surfaceChanged(SurfaceHolder holder1, int format, int width,
 			int height) {
 		// カメラプレビューの開始
 		this.camera.startPreview();
-	}
+	}// surfaceChanged
 
 	// サーフェス開放イベントの処理
 	@Override
-	public void surfaceDestroyed(SurfaceHolder holder) {
+	public void surfaceDestroyed(SurfaceHolder holder1) {
 		// カメラのプレビュー停止
 		this.camera.setPreviewCallback(null);
 		this.camera.stopPreview();
 		this.camera.release();
 		this.camera = null;
-	}
+	}// surfaceDestroyed
 
 	// カメラの切り替えをする時の処理
 	public void cameraChange() {
@@ -73,13 +72,13 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 			try {
 				this.camera.setPreviewDisplay(this.holder);
 			} catch (Exception e) {
-
-			}
+				e.printStackTrace();
+			}// try
 		} else {
 			Toast.makeText(this.context.getApplicationContext(),
 					"サポートしているカメラは一台です", Toast.LENGTH_SHORT).show();
-		}
+		}// if
 		this.camera.startPreview();
-	}
+	}// cameraChange
 
-}
+}// CameraView
