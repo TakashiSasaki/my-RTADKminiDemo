@@ -1,5 +1,10 @@
 package jp.rt_net.android.RTADKminiDemo.test;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import com.stackoverflow.users.whome.Utils;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.test.ActivityInstrumentationTestCase2;
@@ -42,6 +47,14 @@ public class RTCAMHEAD02ActivityTestCase extends
 			}
 		});
 	}// testLastJpeg
+
+	public void testGetIpAddress() {
+		String ip_address = Utils.getIPAddress(true);
+		assertNotNull(ip_address);
+		Pattern pattern = Pattern.compile("[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+");
+		Matcher matcher = pattern.matcher(ip_address);
+		assertTrue(matcher.find());
+	}// testGetIpAddress
 
 	public RTCAMHEAD02ActivityTestCase() {
 		super(RTCAMHEAD02Activity.class);
