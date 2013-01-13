@@ -1,0 +1,30 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript">
+		function init() {
+			// 日付、時刻の表示処理を実行
+			setDateTime();
+		}
+		function setDateTime() {
+			// 日付、時刻の取得
+			var now = new Date();
+			var nowDate = now.getFullYear()+"年"+(now.getMonth()+1)+"月"+now.getDate()+"日";
+			var nowTime = now.getHours()+"時"+ now.getMinutes()+"分"+now.getSeconds()+"秒";
+			document.getElementById("datetime").innerHTML = nowDate +"<br>" + nowTime;
+			// 200ミリ秒毎に日付、時刻の表示処理を実行
+			setTimeout(setDateTime, 200);
+		}
+	</script>
+</head>
+<body onload="init();">
+	<center>
+		Androidでassets内のHTMLを表示<br>
+		<br>
+		<div id="datetime" style="font-size:30px;background-color:#eeeeee;"></div>
+	</center>
+	<center>
+	 	<a href="igum://igum.html/">卒論研究課題</a>
+	</center> 
+</body>
+</html>
