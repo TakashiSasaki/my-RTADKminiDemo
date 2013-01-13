@@ -18,19 +18,20 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		super(context);
 		this.context = context;
 		// サーフェイス・ホルダの生成
-		holder = sv.getHolder();
-		holder.addCallback(this);
+		this.holder = sv.getHolder();
+		this.holder.addCallback(this);
 
 		// プッシュ・バッファの指定
-		holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+		this.holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 	}
 
 	// サーフェス生成イベントの処理
+	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		// カメラの初期化
 		try {
-			camera = Camera.open(cameraId);
-			camera.setPreviewDisplay(holder);
+			this.camera = Camera.open(this.cameraId);
+			this.camera.setPreviewDisplay(holder);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -43,17 +44,17 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
 		// カメラプレビューの開始
-		camera.startPreview();
+		this.camera.startPreview();
 	}
 
 	// サーフェス開放イベントの処理
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		// カメラのプレビュー停止
-		camera.setPreviewCallback(null);
-		camera.stopPreview();
-		camera.release();
-		camera = null;
+		this.camera.setPreviewCallback(null);
+		this.camera.stopPreview();
+		this.camera.release();
+		this.camera = null;
 	}
 
 	// カメラの切り替えをする時の処理
@@ -61,24 +62,24 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		// サポートしているカメラの数を確かめる
 		if (Camera.getNumberOfCameras() >= 1) {
 
-			if (cameraId == 0)
-				cameraId = 1;
+			if (this.cameraId == 0)
+				this.cameraId = 1;
 			else
-				cameraId = 0;
+				this.cameraId = 0;
 
-			camera.stopPreview();
-			camera.release();
-			camera = Camera.open(cameraId);
+			this.camera.stopPreview();
+			this.camera.release();
+			this.camera = Camera.open(this.cameraId);
 			try {
-				camera.setPreviewDisplay(holder);
+				this.camera.setPreviewDisplay(this.holder);
 			} catch (Exception e) {
 
 			}
 		} else {
-			Toast.makeText(context.getApplicationContext(), "サポートしているカメラは一台です",
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(this.context.getApplicationContext(),
+					"サポートしているカメラは一台です", Toast.LENGTH_SHORT).show();
 		}
-		camera.startPreview();
+		this.camera.startPreview();
 	}
 
 }
