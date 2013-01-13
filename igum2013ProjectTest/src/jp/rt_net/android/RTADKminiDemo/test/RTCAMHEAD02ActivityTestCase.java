@@ -46,7 +46,7 @@ public class RTCAMHEAD02ActivityTestCase extends
 		getInstrumentation().waitForIdleSync();
 	}// testTitle
 
-	public void _testLastJpeg() throws InterruptedException {
+	public void testLastJpeg() throws InterruptedException {
 		// Thread.sleep(5000);
 		assertNotNull(this.rtCamHead02Activity);
 		this.rtCamHead02Activity.runOnUiThread(new Runnable() {
@@ -87,7 +87,7 @@ public class RTCAMHEAD02ActivityTestCase extends
 		getInstrumentation().waitForIdleSync();
 	}// testYuv420orYuv422
 
-	public static void _testGetIpAddress() throws SocketException {
+	public static void testGetIpAddress() throws SocketException {
 		String ip_address = Utils.getIPAddress(true);
 		assertNotNull(ip_address);
 		Pattern pattern = Pattern.compile("[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+");

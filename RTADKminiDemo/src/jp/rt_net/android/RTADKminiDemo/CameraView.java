@@ -2,6 +2,8 @@ package jp.rt_net.android.RTADKminiDemo;
 
 import java.io.ByteArrayOutputStream;
 
+import com.tomgibara.blog.Yuv420ToRgb565.Yuv420ToRgb565;
+
 import info.justoneplanet.android.camera.Util;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -21,7 +23,8 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	protected Context context;
 	byte[] lastJpegByteArray;
 	Size lastPreviewSize;
-	byte[] lastRawPreviewData;
+	byte[] lastYuv420;
+	int[] lastRgb565;
 	volatile boolean inCallBack;
 
 	// コントラスタ
@@ -63,20 +66,26 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 				// camera1.stopPreview();
 				camera1.setPreviewCallback(null);
 
-				CameraView.this.lastRawPreviewData = new byte[data.length];
-				for (int i = 0; i < data.length; ++i) {
-					CameraView.this.lastRawPreviewData[i] = data[i];
-				}// for
-
 				CameraView.this.lastPreviewSize = camera1.getParameters()
 						.getPreviewSize();
-				int[] rgb_array = Util.decodeYUV(data,
-						CameraView.this.lastPreviewSize.width,
-						CameraView.this.lastPreviewSize.height);
-				Bitmap bitmap = Bitmap.createBitmap(rgb_array,
+				CameraView.this.lastRgb565 = new int[CameraView.this.lastPreviewSize.width
+						* CameraView.this.lastPreviewSize.height];
+				CameraView.this.lastYuv420 = new byte[data.length];
+				for (int i = 0; i < data.length; ++i) {
+					CameraView.this.lastYuv420[i] = data[i];
+				}// for
+
+				Yuv420ToRgb565.toRGB565(CameraView.this.lastYuv420,
 						CameraView.this.lastPreviewSize.width,
 						CameraView.this.lastPreviewSize.height,
-						Config.ARGB_8888);
+						CameraView.this.lastRgb565);
+				// int[] rgb_array = Util.decodeYUV(data,
+				// CameraView.this.lastPreviewSize.width,
+				// CameraView.this.lastPreviewSize.height);
+
+				Bitmap bitmap = Bitmap.createBitmap(CameraView.this.lastRgb565,
+						CameraView.this.lastPreviewSize.width,
+						CameraView.this.lastPreviewSize.height, Config.RGB_565);
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				bitmap.compress(CompressFormat.JPEG, 80, baos);
 				// bitmap.recycle();
@@ -141,12 +150,12 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	public boolean isYuv422() {
 		final int n_bytes_from_size = this.lastPreviewSize.height
 				* this.lastPreviewSize.width * 2;
-		return this.lastRawPreviewData.length == n_bytes_from_size;
+		return this.lastYuv420.length == n_bytes_from_size;
 	}
 
 	public boolean isYuv420() {
 		final int n_bytes_from_size = this.lastPreviewSize.height
 				* this.lastPreviewSize.width / 2 * 3;
-		return this.lastRawPreviewData.length == n_bytes_from_size;
+		return this.lastYuv420.length == n_bytes_from_size;
 	}
 }// CameraView

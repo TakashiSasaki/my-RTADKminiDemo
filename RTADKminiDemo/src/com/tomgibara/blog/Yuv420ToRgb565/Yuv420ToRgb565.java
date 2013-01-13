@@ -20,7 +20,7 @@ public class Yuv420ToRgb565 {
 	 */
 
 	// we tackle the conversion two pixels at a time for greater speed
-	public static void toRGB565(byte[] yuvs, int width, int height, byte[] rgbs) {
+	public static void toRGB565(byte[] yuvs, int width, int height, int[] rgbs) {
 		// the end of the luminance data
 		final int lumEnd = width * height;
 		// points to the next luminance value pair
@@ -68,8 +68,11 @@ public class Yuv420ToRgb565 {
 			else if (R > 255)
 				R = 255;
 			// NOTE: this assume little-endian encoding
-			rgbs[outPtr++] = (byte) (((G & 0x3c) << 3) | (B >> 3));
-			rgbs[outPtr++] = (byte) ((R & 0xf8) | (G >> 5));
+
+			// rgbs[outPtr++] = (byte) (((G & 0x3c) << 3) | (B >> 3));
+			// rgbs[outPtr++] = (byte) ((R & 0xf8) | (G >> 5));
+			final byte first_low_byte = (byte) (((G & 0x3c) << 3) | (B >> 3));
+			final byte first_high_byte = (byte) ((R & 0xf8) | (G >> 5));
 
 			// generate second RGB components
 			B = Y2 + ((454 * Cb) >> 8);
@@ -88,8 +91,15 @@ public class Yuv420ToRgb565 {
 			else if (R > 255)
 				R = 255;
 			// NOTE: this assume little-endian encoding
-			rgbs[outPtr++] = (byte) (((G & 0x3c) << 3) | (B >> 3));
-			rgbs[outPtr++] = (byte) ((R & 0xf8) | (G >> 5));
-		}
-	}
-}
+			// rgbs[outPtr++] = (byte) (((G & 0x3c) << 3) | (B >> 3));
+			// rgbs[outPtr++] = (byte) ((R & 0xf8) | (G >> 5));
+			final byte second_low_byte = (byte) (((G & 0x3c) << 3) | (B >> 3));
+			final byte second_high_byte = (byte) ((R & 0xf8) | (G >> 5));
+
+			rgbs[outPtr++] = (first_low_byte & 0xff) << 24
+					| (first_high_byte & 0xff) << 16
+					| (second_low_byte & 0xff) << 8 | (second_high_byte & 0xff);
+		}// while
+		assert outPtr == rgbs.length;
+	}// toRGB565
+}// Yuv420ToRgb565
