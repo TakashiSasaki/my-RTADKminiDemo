@@ -1,7 +1,14 @@
 package jp.rt_net.android.RTADKminiDemo;
 
+import java.io.ByteArrayOutputStream;
+
+import info.justoneplanet.android.camera.Util;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.Bitmap.Config;
 import android.hardware.Camera;
+import android.hardware.Camera.Size;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Toast;
@@ -12,6 +19,8 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	private SurfaceHolder holder; // ホルダ
 	private Camera camera; // カメラ
 	protected Context context;
+	byte[] lastJpegByteArray;
+	Size lastPreviewSize;
 
 	// コントラスタ
 	public CameraView(Context context, SurfaceView sv) {
@@ -50,11 +59,37 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder1) {
 		// カメラのプレビュー停止
-		this.camera.setPreviewCallback(null);
+		this.camera.setPreviewCallback(new Camera.PreviewCallback() {
+
+			@Override
+			public void onPreviewFrame(byte[] data, Camera camera1) {
+				if (data == null)
+					return;
+				camera1.stopPreview();
+				camera1.setPreviewCallback(null);
+				CameraView.this.lastPreviewSize = camera1.getParameters().getPreviewSize();
+				Bitmap bitmap = Bitmap.createBitmap(Util.decodeYUV(data,
+						CameraView.this.lastPreviewSize.width, CameraView.this.lastPreviewSize.height),
+						CameraView.this.lastPreviewSize.width, CameraView.this.lastPreviewSize.height,
+						Config.ARGB_8888);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				bitmap.compress(CompressFormat.JPEG, 80, baos);
+				bitmap.recycle();
+				CameraView.this.lastJpegByteArray = baos.toByteArray();
+				camera1.setPreviewCallback(this);
+				camera1.startPreview();
+			}// onPreviewFrame
+		});
 		this.camera.stopPreview();
 		this.camera.release();
 		this.camera = null;
 	}// surfaceDestroyed
+
+	public byte[] getLastJpegByteArray() {
+		byte[] bytes = this.lastJpegByteArray;
+		this.lastJpegByteArray = null;
+		return bytes;
+	}// getLastJpegByteArray
 
 	// カメラの切り替えをする時の処理
 	public void cameraChange() {

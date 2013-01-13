@@ -14,6 +14,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.content.Intent;
+import android.hardware.Camera.Size;
 
 public class RTCAMHEAD02Activity extends Activity {
 
@@ -265,4 +266,12 @@ public class RTCAMHEAD02Activity extends Activity {
 		} // handleMessage
 	}; // handler
 
-}
+	public byte[] getLastJpegByteArray() {
+		return this.mCameraView.getLastJpegByteArray();
+	}// getLastJpegByteArray
+
+	public Size getLastPreviewSize() {
+		return this.mCameraView.lastPreviewSize;
+	}// getLastPreviewSize
+
+}// RTCAMHEAD02Activity
