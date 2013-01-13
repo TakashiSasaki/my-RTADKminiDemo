@@ -41,7 +41,7 @@ public class USBAccessoryManagerMessage {
 		CONNECTED,
 		DISCONNECTED,
 		READY
-	};
+	}
 
 	/* The MessageType for this message instance */
 	public MessageType type;
