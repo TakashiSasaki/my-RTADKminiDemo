@@ -31,20 +31,22 @@ public class RTCAMHEAD02Activity extends Activity {
 	public static final int BUTTON_4_PRESSED = 0x08;
 
 	// サーボモータの角度情報
-	private static int servo01_pos = 0;
-	private static int servo02_pos = 0;
+	static int servo01_pos = 0;
+	static int servo02_pos = 0;
 
-	private USBAccessoryManager accessoryManager;
+	USBAccessoryManager accessoryManager;
 
-	private Handler uiHandler;
+	Handler uiHandler;
 	private SurfaceView mSurfaceView;
 	private CameraView mCameraView;
 
 	// UI
-	private SeekBar seekBar1, seekBar2;
-	private TextView value_of_seekbar1, value_of_seekbar2;
+	SeekBar seekBar1;
+	SeekBar seekBar2;
+	TextView value_of_seekbar1;
+	TextView value_of_seekbar2;
 	private Button button1, button2;
-	
+
 	// network thread
 	HttpServerThread httpServerThread;
 
@@ -53,95 +55,110 @@ public class RTCAMHEAD02Activity extends Activity {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.rtcamheadactivity);
 
-		accessoryManager = new USBAccessoryManager(handler, USBAccessoryWhat);
+		this.accessoryManager = new USBAccessoryManager(this.handler,
+				USBAccessoryWhat);
 
 		// 作成したCameraViewクラスをインスタンス化
-		mSurfaceView = (SurfaceView) findViewById(R.id.surface_view);
-		mCameraView = new CameraView(this, mSurfaceView);
+		this.mSurfaceView = (SurfaceView) findViewById(R.id.surface_view);
+		this.mCameraView = new CameraView(this, this.mSurfaceView);
 
 		/******* SeekBar1の定義 *******/
-		seekBar1 = (SeekBar) findViewById(R.id.seekBar1);
-		value_of_seekbar1 = (TextView) findViewById(R.id.valueOfseekBar1);
+		this.seekBar1 = (SeekBar) findViewById(R.id.seekBar1);
+		this.value_of_seekbar1 = (TextView) findViewById(R.id.valueOfseekBar1);
 		// シークバーの初期値をTextViewに表示
-		value_of_seekbar1.setText("Current Value:" + seekBar1.getProgress());
+		this.value_of_seekbar1.setText("Current Value:"
+				+ this.seekBar1.getProgress());
 		// シークバーの現在地、初期値、セカンダリ値をリセット
-		seekBar1.setMax(255);
-		seekBar1.setProgress(0);
-		seekBar1.setSecondaryProgress(0);
+		this.seekBar1.setMax(255);
+		this.seekBar1.setProgress(0);
+		this.seekBar1.setSecondaryProgress(0);
 		// SeekBar1 の値が変更された時に呼び出されるコールバックを登録
-		seekBar1.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+		this.seekBar1.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
 			// SeekBar1 の値が変わった時の動作
+			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromTouch) {
 				servo01_pos = progress; // servo01の角度はseekBarのprogressで決まる
-				value_of_seekbar1.setText("Current Value:" + progress); // textにseekbar1を表示
-				uiHandler = handler;
+				RTCAMHEAD02Activity.this.value_of_seekbar1
+						.setText("Current Value:" + progress); // textにseekbar1を表示
+				RTCAMHEAD02Activity.this.uiHandler = RTCAMHEAD02Activity.this.handler;
 
-				Message servo01Update = Message.obtain(uiHandler, SERVO_01);
-				if (uiHandler != null) {
-					uiHandler.sendMessage(servo01Update);
+				Message servo01Update = Message.obtain(
+						RTCAMHEAD02Activity.this.uiHandler, SERVO_01);
+				if (RTCAMHEAD02Activity.this.uiHandler != null) {
+					RTCAMHEAD02Activity.this.uiHandler
+							.sendMessage(servo01Update);
 				}
 			}
 
 			// SeekBar のタッチの開始時の動作
+			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) {
 			}
 
 			// SeekBar のタッチの終了時の動作
+			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
 			}
 		});
 
 		/******* SeekBar2の定義 *******/
-		seekBar2 = (SeekBar) findViewById(R.id.seekBar2);
-		value_of_seekbar2 = (TextView) findViewById(R.id.valueOfseekBar2);
+		this.seekBar2 = (SeekBar) findViewById(R.id.seekBar2);
+		this.value_of_seekbar2 = (TextView) findViewById(R.id.valueOfseekBar2);
 		// シークバーの初期値をTextViewに表示
-		value_of_seekbar2.setText("Current Value:" + seekBar2.getProgress());
+		this.value_of_seekbar2.setText("Current Value:"
+				+ this.seekBar2.getProgress());
 		// シークバーの現在地、初期値、セカンダリ値をセット
-		seekBar2.setMax(255);
-		seekBar2.setProgress(0);
-		seekBar2.setSecondaryProgress(0);
+		this.seekBar2.setMax(255);
+		this.seekBar2.setProgress(0);
+		this.seekBar2.setSecondaryProgress(0);
 		// SeekBar の値が変更された時に呼び出されるコールバックを登録
-		seekBar2.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+		this.seekBar2.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			// SeekBar2 の値が変わった時の動作
+			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromTouch) {
 				servo02_pos = progress;
-				value_of_seekbar2.setText("Current Value:" + progress);
-				uiHandler = handler;
+				RTCAMHEAD02Activity.this.value_of_seekbar2
+						.setText("Current Value:" + progress);
+				RTCAMHEAD02Activity.this.uiHandler = RTCAMHEAD02Activity.this.handler;
 
-				Message servo02Update = Message.obtain(uiHandler, SERVO_02);
-				if (uiHandler != null) {
-					uiHandler.sendMessage(servo02Update);
+				Message servo02Update = Message.obtain(
+						RTCAMHEAD02Activity.this.uiHandler, SERVO_02);
+				if (RTCAMHEAD02Activity.this.uiHandler != null) {
+					RTCAMHEAD02Activity.this.uiHandler
+							.sendMessage(servo02Update);
 				}
 			}
 
 			// SeekBar のタッチの開始時の動作
+			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) {
 			}
 
 			// SeekBar のタッチの終了時の動作
+			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
 			}
 		});
 
 		/******* originボタンの定義 *******/
-		button1 = (Button) findViewById(R.id.OriginButton);
+		this.button1 = (Button) findViewById(R.id.OriginButton);
 
-		button1.setOnClickListener(new View.OnClickListener() {
+		this.button1.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// originボタンがクリックされた時に呼び出される
-				seekBar1.setProgress(127);// サーボモータ01を強制的に原点に戻す
-				seekBar2.setProgress(127);// サーボモータ02を強制的に原点に戻す
+				RTCAMHEAD02Activity.this.seekBar1.setProgress(127);// サーボモータ01を強制的に原点に戻す
+				RTCAMHEAD02Activity.this.seekBar2.setProgress(127);// サーボモータ02を強制的に原点に戻す
 			}
 		});
 
 		/******* CamChangeボタンの定義 *******/
-		button2 = (Button) findViewById(R.id.CamChangeButton);
+		this.button2 = (Button) findViewById(R.id.CamChangeButton);
 
-		button2.setOnClickListener(new View.OnClickListener() {
+		this.button2.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// CamChangeボタンがクリックされた時に呼び出される
@@ -151,8 +168,8 @@ public class RTCAMHEAD02Activity extends Activity {
 				startActivity(i);
 			}
 		});
-		
-		//this.httpServerThread = new HttpServerThread(this);
+
+		// this.httpServerThread = new HttpServerThread(this);
 
 	}// onCreate
 
@@ -166,13 +183,13 @@ public class RTCAMHEAD02Activity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		accessoryManager.enable(this, getIntent());
+		this.accessoryManager.enable(this, getIntent());
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		accessoryManager.disable(this);
+		this.accessoryManager.disable(this);
 		disconnectAccessory();
 	}
 
@@ -189,40 +206,42 @@ public class RTCAMHEAD02Activity extends Activity {
 
 			switch (msg.what) {
 			case SERVO_01:
-				if (accessoryManager.isConnected() == false) {
+				if (RTCAMHEAD02Activity.this.accessoryManager.isConnected() == false) {
 					return;
 				}
 
 				commandPacket[0] = SERVO_01;
 				commandPacket[1] = (byte) servo01_pos;
-				accessoryManager.write(commandPacket);
+				RTCAMHEAD02Activity.this.accessoryManager.write(commandPacket);
 				break;
 			case SERVO_02:
-				if (accessoryManager.isConnected() == false) {
+				if (RTCAMHEAD02Activity.this.accessoryManager.isConnected() == false) {
 					return;
 				}
 
 				commandPacket[0] = SERVO_02;
 				commandPacket[1] = (byte) servo02_pos;
-				accessoryManager.write(commandPacket);
+				RTCAMHEAD02Activity.this.accessoryManager.write(commandPacket);
 				break;
 
 			case USBAccessoryWhat:
 				switch (((USBAccessoryManagerMessage) msg.obj).type) {
 				case READ:
-					if (accessoryManager.isConnected() == false) {
+					if (RTCAMHEAD02Activity.this.accessoryManager.isConnected() == false) {
 						return;
 					}
 
 					while (true) {
-						if (accessoryManager.available() < 2) {
+						if (RTCAMHEAD02Activity.this.accessoryManager
+								.available() < 2) {
 							// コマンドの最大サイズは2byteなのでバッファのサイズが2btyeよりも小さくなったら抜ける
 							break;
 						}
 
 						// commandPacketのバッファのデータの書き込み、
 						// 読み込んだデータを消去する
-						accessoryManager.read(commandPacket);
+						RTCAMHEAD02Activity.this.accessoryManager
+								.read(commandPacket);
 
 						switch (commandPacket[0]) {
 						// DIN0,1,2,3につながっているタクトスイッチが押された時の処理
@@ -231,25 +250,29 @@ public class RTCAMHEAD02Activity extends Activity {
 								servo01_pos += 10;
 								if (servo01_pos >= 255)
 									servo01_pos = 255;
-								seekBar1.setProgress(servo01_pos);
+								RTCAMHEAD02Activity.this.seekBar1
+										.setProgress(servo01_pos);
 							}
 							if ((commandPacket[1] & BUTTON_2_PRESSED) == BUTTON_2_PRESSED) {
 								servo01_pos -= 10;
 								if (servo01_pos <= 0)
 									servo01_pos = 0;
-								seekBar1.setProgress(servo01_pos);
+								RTCAMHEAD02Activity.this.seekBar1
+										.setProgress(servo01_pos);
 							}
 							if ((commandPacket[1] & BUTTON_3_PRESSED) == BUTTON_3_PRESSED) {
 								servo02_pos += 10;
 								if (servo02_pos >= 255)
 									servo02_pos = 255;
-								seekBar2.setProgress(servo02_pos);
+								RTCAMHEAD02Activity.this.seekBar2
+										.setProgress(servo02_pos);
 							}
 							if ((commandPacket[1] & BUTTON_4_PRESSED) == BUTTON_4_PRESSED) {
 								servo02_pos -= 10;
 								if (servo02_pos <= 0)
 									servo02_pos = 0;
-								seekBar2.setProgress(servo02_pos);
+								RTCAMHEAD02Activity.this.seekBar2
+										.setProgress(servo02_pos);
 							}
 							break;
 						}
@@ -278,12 +301,12 @@ public class RTCAMHEAD02Activity extends Activity {
 	public Size getLastPreviewSize() {
 		return this.mCameraView.lastPreviewSize;
 	}// getLastPreviewSize
-	
+
 	public boolean isYuv420() {
 		return this.mCameraView.isYuv420();
 	}
-	
-	public boolean isYuv422(){
+
+	public boolean isYuv422() {
 		return this.mCameraView.isYuv422();
 	}
 
