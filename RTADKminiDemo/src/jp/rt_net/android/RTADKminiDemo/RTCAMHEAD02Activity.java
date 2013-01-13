@@ -44,6 +44,9 @@ public class RTCAMHEAD02Activity extends Activity {
 	private SeekBar seekBar1, seekBar2;
 	private TextView value_of_seekbar1, value_of_seekbar2;
 	private Button button1, button2;
+	
+	// network thread
+	HttpServerThread httpServerThread;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -148,6 +151,8 @@ public class RTCAMHEAD02Activity extends Activity {
 				startActivity(i);
 			}
 		});
+		
+		//this.httpServerThread = new HttpServerThread(this);
 
 	}// onCreate
 
@@ -273,5 +278,13 @@ public class RTCAMHEAD02Activity extends Activity {
 	public Size getLastPreviewSize() {
 		return this.mCameraView.lastPreviewSize;
 	}// getLastPreviewSize
+	
+	public boolean isYuv420() {
+		return this.mCameraView.isYuv420();
+	}
+	
+	public boolean isYuv422(){
+		return this.mCameraView.isYuv422();
+	}
 
 }// RTCAMHEAD02Activity
