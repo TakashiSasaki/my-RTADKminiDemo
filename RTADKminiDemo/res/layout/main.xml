@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
-	
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 android:orientation="vertical"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent"
 android:background='@color/white'
 >
+    
     <ImageView
     android:layout_height="fill_parent"
     android:layout_width="fill_parent"
@@ -20,9 +19,6 @@ android:background='@color/white'
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-   
-
-    
     	    
 	    <!-- Title bar for DOUT controls -->
 	    
@@ -39,6 +35,7 @@ android:background='@color/white'
 		    android:id="@+id/text_view"
 		    android:textColor="@color/black"
 		    />
+			
 	    </LinearLayout>
 	    
 	    <!-- DOUT control buttons -->
@@ -145,15 +142,7 @@ android:background='@color/white'
 			    android:layout_height="wrap_content"
 			    android:textColor="@color/black"
 			    android:text="AOUT0" />
-			
-			<Button
-	            android:id="@+id/button5"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="button5" >
-	        </Button> 
-			
-			
+	
 			<view
 			class="jp.rt_net.android.RTADKminiDemo.LEDControl"
 			android:id="@+id/led_4"
