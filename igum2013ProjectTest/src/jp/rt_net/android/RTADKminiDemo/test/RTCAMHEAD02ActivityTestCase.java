@@ -46,7 +46,7 @@ public class RTCAMHEAD02ActivityTestCase extends
 		getInstrumentation().waitForIdleSync();
 	}// testTitle
 
-	public void testLastJpeg() throws InterruptedException {
+	public void testLastJpeg() {
 		// Thread.sleep(5000);
 		assertNotNull(this.rtCamHead02Activity);
 		this.rtCamHead02Activity.runOnUiThread(new Runnable() {

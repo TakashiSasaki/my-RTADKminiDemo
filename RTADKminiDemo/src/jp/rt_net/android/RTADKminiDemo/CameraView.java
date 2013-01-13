@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 
 import com.tomgibara.blog.Yuv420ToRgb565.Yuv420ToRgb565;
 
-import info.justoneplanet.android.camera.Util;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
