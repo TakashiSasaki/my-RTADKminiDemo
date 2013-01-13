@@ -39,8 +39,8 @@ import android.util.Log;
 import com.android.future.usb.UsbAccessory;
 //import android.hardware.usb.UsbAccessory;
 import com.android.future.usb.UsbManager;
-//import android.hardware.usb.UsbManager;
 
+//import android.hardware.usb.UsbManager;
 
 /**
  * A class created to assist in making accessing a USB accessory easier for
@@ -53,21 +53,21 @@ import com.android.future.usb.UsbManager;
  */
 public class USBAccessoryManager {
 
-	private String actionString = null;
-	private Handler handler;
-	private int what;
+	String actionString = null;
+	Handler handler;
+	int what;
 
-	private boolean enabled = false;
+	boolean enabled = false;
 	private boolean permissionRequested = false;
-	private boolean open = false;
+	boolean open = false;
 
-	private FileOutputStream outputStream = null;
-	private ParcelFileDescriptor parcelFileDescriptor = null;
-	private ReadThread readThread = null;
+	FileOutputStream outputStream = null;
+	ParcelFileDescriptor parcelFileDescriptor = null;
+	ReadThread readThread = null;
 
-	private ArrayList<byte[]> readData = new ArrayList<byte[]>();
-	
-	private String TAG = "MICROCHIP";
+	ArrayList<byte[]> readData = new ArrayList<byte[]>();
+
+	String TAG = "MICROCHIP";
 
 	/***********************************************************************/
 	/** Public API **/
@@ -102,13 +102,13 @@ public class USBAccessoryManager {
 	 */
 	public RETURN_CODES enable(Context context, Intent intent) {
 		// Grab the packageName to use for an attach Intent
-		actionString = context.getPackageName() + ".action.USB_PERMISSION";
+		this.actionString = context.getPackageName() + ".action.USB_PERMISSION";
 
 		PendingIntent permissionIntent = PendingIntent.getBroadcast(context, 0,
-				new Intent(actionString), 0);
+				new Intent(this.actionString), 0);
 
 		// If the USB manager isn't already enabled
-		if (enabled == false) {
+		if (this.enabled == false) {
 			// Create a new filter with the package name (for the accessory
 			// attach)
 
@@ -118,13 +118,13 @@ public class USBAccessoryManager {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			
-			IntentFilter filter = new IntentFilter(actionString);
+
+			IntentFilter filter = new IntentFilter(this.actionString);
 			// Also add a few other actions to the intent...
 			filter.addAction(UsbManager.ACTION_USB_ACCESSORY_ATTACHED);
 			filter.addAction(UsbManager.ACTION_USB_ACCESSORY_DETACHED);
 			// and register the intent with the specified context
-			context.registerReceiver(receiver, filter);
+			context.registerReceiver(this.receiver, filter);
 
 			UsbManager deviceManager = null;
 			UsbAccessory[] accessories = null;
@@ -132,10 +132,10 @@ public class USBAccessoryManager {
 
 			// Get a UsbManager object from the specified intent (only works for
 			// v3.1+ devices)
-			//deviceManager = (UsbManager) context
-			//		.getSystemService(Context.USB_SERVICE);
+			// deviceManager = (UsbManager) context
+			// .getSystemService(Context.USB_SERVICE);
 			deviceManager = UsbManager.getInstance(context);
-			
+
 			// If we were unable to get a UsbManager, return an error
 			if (deviceManager == null) {
 				return RETURN_CODES.DEVICE_MANAGER_IS_NULL;
@@ -160,33 +160,36 @@ public class USBAccessoryManager {
 				if (deviceManager.hasPermission(accessory)) {
 					// Try to open a ParcelFileDescriptor by opening the
 					// accessory
-					parcelFileDescriptor = deviceManager
+					this.parcelFileDescriptor = deviceManager
 							.openAccessory(accessory);
 
-					if (parcelFileDescriptor != null) {
+					if (this.parcelFileDescriptor != null) {
 						// Create a new read thread to handle reading data from
 						// the accessory
-						readThread = new ReadThread(parcelFileDescriptor);
-						readThread.start();
+						this.readThread = new ReadThread(
+								this.parcelFileDescriptor);
+						this.readThread.start();
 
 						deviceManager.requestPermission(accessory,
 								permissionIntent);
-						
-						if(parcelFileDescriptor == null) {
-							Log.d(TAG, "USBAccessoryManager:enable() parcelFileDescriptor == null");
+
+						if (this.parcelFileDescriptor == null) {
+							Log.d(this.TAG,
+									"USBAccessoryManager:enable() parcelFileDescriptor == null");
 							return RETURN_CODES.FILE_DESCRIPTOR_WOULD_NOT_OPEN;
 						}
-						
+
 						// Open the output file stream for writing data out to
 						// the accessory
-						outputStream = new FileOutputStream(
-								parcelFileDescriptor.getFileDescriptor());
-						
-						if(outputStream == null) {
-							Log.d(TAG, "USBAccessoryManager:enable() outputStream == null");
-							
+						this.outputStream = new FileOutputStream(
+								this.parcelFileDescriptor.getFileDescriptor());
+
+						if (this.outputStream == null) {
+							Log.d(this.TAG,
+									"USBAccessoryManager:enable() outputStream == null");
+
 							try {
-								parcelFileDescriptor.close();
+								this.parcelFileDescriptor.close();
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -194,21 +197,22 @@ public class USBAccessoryManager {
 							return RETURN_CODES.FILE_DESCRIPTOR_WOULD_NOT_OPEN;
 						}
 
-						Log.d(TAG,
+						Log.d(this.TAG,
 								"USBAccessoryManager:enable() outputStream open");
 
 						// If the ParcelFileDescriptor was successfully opened,
 						// mark the accessory as enabled and open
-						enabled = true;
-						open = true;
+						this.enabled = true;
+						this.open = true;
 
-						handler.obtainMessage(
-								what,
-								new USBAccessoryManagerMessage(
-										USBAccessoryManagerMessage.MessageType.READY,
-										accessory)).sendToTarget();
+						this.handler
+								.obtainMessage(
+										this.what,
+										new USBAccessoryManagerMessage(
+												USBAccessoryManagerMessage.MessageType.READY,
+												accessory)).sendToTarget();
 
-						Log.d(TAG,
+						Log.d(this.TAG,
 								"USBAccessoryManager:enable() device ready");
 
 						return RETURN_CODES.SUCCESS;
@@ -235,12 +239,12 @@ public class USBAccessoryManager {
 					 * accessory, then we need to request it. If we haven't
 					 * requested it already...
 					 */
-					if (permissionRequested == false) {
+					if (this.permissionRequested == false) {
 						// Then go ahead and request it...
 						deviceManager.requestPermission(accessory,
 								permissionIntent);
 
-						permissionRequested = true;
+						this.permissionRequested = true;
 						return RETURN_CODES.PERMISSION_PENDING;
 					}
 				}
@@ -264,7 +268,7 @@ public class USBAccessoryManager {
 
 		// Unregister the broadcast receiver
 		try {
-			context.unregisterReceiver(receiver);
+			context.unregisterReceiver(this.receiver);
 		} catch (Exception e) {
 		}
 	}
@@ -275,7 +279,7 @@ public class USBAccessoryManager {
 	 * @return boolean - true if one is attached, false otherwise
 	 */
 	public boolean isConnected() {
-		return open;
+		return this.open;
 	}
 
 	/** I/O API *****************************************************/
@@ -304,7 +308,7 @@ public class USBAccessoryManager {
 		// synchronizing to the readData object so that the ReadThread and this
 		// don't try to access the readData object at the same time. This will
 		// block whoever tries to access it second until it is available.
-		synchronized (readData) {
+		synchronized (this.readData) {
 			// Keep reading through the data objects until one of the many
 			// internal
 			// checks decides to exit. This each entry in this loop either
@@ -314,7 +318,7 @@ public class USBAccessoryManager {
 			// this loop should always exit.
 			while (true) {
 				// If there are no more data objects in the list, exit
-				if (readData.size() == 0) {
+				if (this.readData.size() == 0) {
 					return;
 				}
 
@@ -324,15 +328,15 @@ public class USBAccessoryManager {
 					return;
 				}
 
-				if ((num - amountRead) >= readData.get(0).length) {
+				if ((num - amountRead) >= this.readData.get(0).length) {
 					// We need to ignore equal to or greater than the size of
 					// data in this entry
 
 					// then ignore the whole size of the entry
-					amountRead += readData.get(0).length;
+					amountRead += this.readData.get(0).length;
 
 					// and remove it from the list.
-					readData.remove(0);
+					this.readData.remove(0);
 				} else {
 					// We need to ignore only a portion of the data in this
 					// entry
@@ -340,20 +344,20 @@ public class USBAccessoryManager {
 					// only remove a portion of the entry, leaving part of the
 					// data
 					int amountRemoved = num - amountRead;
-					byte[] newData = new byte[readData.get(0).length
+					byte[] newData = new byte[this.readData.get(0).length
 							- amountRemoved];
 
 					// Copy the remaining data in to a new buffer
 					for (int i = 0; i < newData.length; i++) {
-						newData[i] = readData.get(0)[i + amountRemoved];
+						newData[i] = this.readData.get(0)[i + amountRemoved];
 					}
 
 					// remove the old entry
-					readData.remove(0);
+					this.readData.remove(0);
 
 					// add a new entry to the front of the buffer with the
 					// remaining data
-					readData.add(0, newData);
+					this.readData.add(0, newData);
 
 					// since we have now read all of the data that we need, exit
 					return;
@@ -390,14 +394,14 @@ public class USBAccessoryManager {
 		 * attempt to add more data to the readData list while we are accessing
 		 * it.
 		 */
-		synchronized (readData) {
+		synchronized (this.readData) {
 			/* While we still have data to read */
 			while (true) {
 				/*
 				 * if we have run out of list objects to peek from... (no data
 				 * left to peek)
 				 */
-				if (currentNode >= readData.size()) {
+				if (currentNode >= this.readData.size()) {
 					/* then return the amount that we have read */
 					return amountRead;
 				}
@@ -410,18 +414,19 @@ public class USBAccessoryManager {
 					return amountRead;
 				}
 
-				if ((array.length - amountRead) >= readData.get(currentNode).length) {
+				if ((array.length - amountRead) >= this.readData
+						.get(currentNode).length) {
 					// If the amount we need to read is larger than or equal to
 					// the data buffer for this node
-					for (int i = 0; i < readData.get(currentNode).length; i++) {
-						array[amountRead++] = readData.get(currentNode)[i];
+					for (int i = 0; i < this.readData.get(currentNode).length; i++) {
+						array[amountRead++] = this.readData.get(currentNode)[i];
 					}
 					currentNode++;
 				} else {
 					// If the amount we need to read is less than the data
 					// buffer for this node
 					for (int i = 0; i < (array.length - amountRead); i++) {
-						array[amountRead++] = readData.get(currentNode)[i];
+						array[amountRead++] = this.readData.get(currentNode)[i];
 					}
 
 					return amountRead;
@@ -452,8 +457,8 @@ public class USBAccessoryManager {
 		 * Synchronize to the readData object so that the ReadThread doesn't try
 		 * to add data the list while we are accessing it.
 		 */
-		synchronized (readData) {
-			for (byte[] b : readData) {
+		synchronized (this.readData) {
+			for (byte[] b : this.readData) {
 				amount += b.length;
 			}
 		}
@@ -488,14 +493,14 @@ public class USBAccessoryManager {
 		 * Synchronize to the readData object so that the ReadThread doesn't try
 		 * to add data to the list while we are accessing it.
 		 */
-		synchronized (readData) {
+		synchronized (this.readData) {
 			/* while we still have data to read */
 			while (true) {
 				/*
 				 * if there is no data left in the list, exit with the amount
 				 * read already
 				 */
-				if (readData.size() == 0) {
+				if (this.readData.size() == 0) {
 					return amountRead;
 				}
 
@@ -507,16 +512,16 @@ public class USBAccessoryManager {
 					return amountRead;
 				}
 
-				if ((array.length - amountRead) >= readData.get(0).length) {
+				if ((array.length - amountRead) >= this.readData.get(0).length) {
 					/*
 					 * If the amount we need to read is larger than or equal to
 					 * the data buffer for this node, then copy what is here and
 					 * remove it from the list
 					 */
-					for (int i = 0; i < readData.get(0).length; i++) {
-						array[amountRead++] = readData.get(0)[i];
+					for (int i = 0; i < this.readData.get(0).length; i++) {
+						array[amountRead++] = this.readData.get(0)[i];
 					}
-					readData.remove(0);
+					this.readData.remove(0);
 				} else {
 					// If the amount we need to read is less than the data
 					// buffer for this node
@@ -524,25 +529,25 @@ public class USBAccessoryManager {
 
 					/* then copy what we need */
 					for (int i = 0; i < (array.length - amountRead); i++) {
-						array[amountRead++] = readData.get(0)[i];
+						array[amountRead++] = this.readData.get(0)[i];
 						amountRemoved++;
 					}
 
 					/* create a new buffer the size of the remaining data */
-					byte[] newData = new byte[readData.get(0).length
+					byte[] newData = new byte[this.readData.get(0).length
 							- amountRemoved];
 
 					/* copy the remaining data to that buffer */
 					for (int i = 0; i < newData.length; i++) {
-						newData[i] = readData.get(0)[i + amountRemoved];
+						newData[i] = this.readData.get(0)[i + amountRemoved];
 					}
 
 					/*
 					 * remove the old object and add a new object with the
 					 * remaining data
 					 */
-					readData.remove(0);
-					readData.add(0, newData);
+					this.readData.remove(0);
+					this.readData.add(0, newData);
 
 					return amountRead;
 				}
@@ -561,7 +566,7 @@ public class USBAccessoryManager {
 		int tries = 2;
 
 		if (isConnected() == true) {
-			if (outputStream != null) {
+			if (this.outputStream != null) {
 				/*
 				 * we try here a few times because on first attachment the
 				 * Android pipe doesn't appear to be completely open yet and
@@ -571,10 +576,10 @@ public class USBAccessoryManager {
 				 */
 				while (tries-- > 0) {
 					try {
-						outputStream.write(data);
+						this.outputStream.write(data);
 						return;
 					} catch (IOException e) {
-						Log.d(TAG,
+						Log.d(this.TAG,
 								"USBAccessoryManager:write():IOException: "
 										+ e.toString());
 						try {
@@ -603,7 +608,7 @@ public class USBAccessoryManager {
 			 * if it corresponds to the packageName, then it was a permissions
 			 * grant request
 			 */
-			if (actionString.equals(action)) {
+			if (USBAccessoryManager.this.actionString.equals(action)) {
 				/* see if we got permission */
 				if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED,
 						false)) {
@@ -611,39 +616,42 @@ public class USBAccessoryManager {
 					UsbManager deviceManager = null;
 					UsbAccessory accessory = null;
 
-					//deviceManager = (UsbManager) context
-					//		.getSystemService(Context.USB_SERVICE);
-					deviceManager = UsbManager.getInstance(context); 
+					// deviceManager = (UsbManager) context
+					// .getSystemService(Context.USB_SERVICE);
+					deviceManager = UsbManager.getInstance(context);
 
 					if (deviceManager == null) {
 						// TODO: error. report to user?
 						return;
 					}
 
-					//accessory = (UsbAccessory) intent
-					//		.getParcelableExtra(UsbManager.EXTRA_ACCESSORY);
+					// accessory = (UsbAccessory) intent
+					// .getParcelableExtra(UsbManager.EXTRA_ACCESSORY);
 					accessory = UsbManager.getAccessory(intent);
-					
-					parcelFileDescriptor = deviceManager
+
+					USBAccessoryManager.this.parcelFileDescriptor = deviceManager
 							.openAccessory(accessory);
 
-					if (parcelFileDescriptor != null) {
-						enabled = true;
-						open = true;
+					if (USBAccessoryManager.this.parcelFileDescriptor != null) {
+						USBAccessoryManager.this.enabled = true;
+						USBAccessoryManager.this.open = true;
 
-						outputStream = new FileOutputStream(
-								parcelFileDescriptor.getFileDescriptor());
+						USBAccessoryManager.this.outputStream = new FileOutputStream(
+								USBAccessoryManager.this.parcelFileDescriptor
+										.getFileDescriptor());
 
-						readThread = new ReadThread(parcelFileDescriptor);
-						readThread.start();
+						USBAccessoryManager.this.readThread = new ReadThread(
+								USBAccessoryManager.this.parcelFileDescriptor);
+						USBAccessoryManager.this.readThread.start();
 
-						Log.d(TAG,
+						Log.d(USBAccessoryManager.this.TAG,
 								"USBAccessoryManager:BroadcastReceiver()-1");
-						handler.obtainMessage(
-								what,
-								new USBAccessoryManagerMessage(
-										USBAccessoryManagerMessage.MessageType.READY,
-										accessory)).sendToTarget();
+						USBAccessoryManager.this.handler
+								.obtainMessage(
+										USBAccessoryManager.this.what,
+										new USBAccessoryManagerMessage(
+												USBAccessoryManagerMessage.MessageType.READY,
+												accessory)).sendToTarget();
 					} else {
 						// TODO: error. report to user?
 						return;
@@ -660,9 +668,9 @@ public class USBAccessoryManager {
 				UsbAccessory[] accessories = null;
 				UsbAccessory accessory = null;
 
-				//deviceManager = (UsbManager) context
-				//		.getSystemService(Context.USB_SERVICE);
-				deviceManager = UsbManager.getInstance(context);  
+				// deviceManager = (UsbManager) context
+				// .getSystemService(Context.USB_SERVICE);
+				deviceManager = UsbManager.getInstance(context);
 
 				if (deviceManager == null) {
 					// TODO: error. report to user?
@@ -678,24 +686,29 @@ public class USBAccessoryManager {
 
 				accessory = accessories[0];
 
-				parcelFileDescriptor = deviceManager.openAccessory(accessory);
+				USBAccessoryManager.this.parcelFileDescriptor = deviceManager
+						.openAccessory(accessory);
 
-				if (parcelFileDescriptor != null) {
-					enabled = true;
-					open = true;
+				if (USBAccessoryManager.this.parcelFileDescriptor != null) {
+					USBAccessoryManager.this.enabled = true;
+					USBAccessoryManager.this.open = true;
 
-					outputStream = new FileOutputStream(
-							parcelFileDescriptor.getFileDescriptor());
+					USBAccessoryManager.this.outputStream = new FileOutputStream(
+							USBAccessoryManager.this.parcelFileDescriptor
+									.getFileDescriptor());
 
-					readThread = new ReadThread(parcelFileDescriptor);
-					readThread.start();
+					USBAccessoryManager.this.readThread = new ReadThread(
+							USBAccessoryManager.this.parcelFileDescriptor);
+					USBAccessoryManager.this.readThread.start();
 
-					Log.d(TAG, "USBAccessoryManager:BroadcastReceiver()-2");
-					handler.obtainMessage(
-							what,
-							new USBAccessoryManagerMessage(
-									USBAccessoryManagerMessage.MessageType.READY,
-									accessory)).sendToTarget();
+					Log.d(USBAccessoryManager.this.TAG,
+							"USBAccessoryManager:BroadcastReceiver()-2");
+					USBAccessoryManager.this.handler
+							.obtainMessage(
+									USBAccessoryManager.this.what,
+									new USBAccessoryManagerMessage(
+											USBAccessoryManagerMessage.MessageType.READY,
+											accessory)).sendToTarget();
 				} else {
 					// TODO: error. report to user?
 					return;
@@ -706,10 +719,11 @@ public class USBAccessoryManager {
 				 * notify the user
 				 */
 				closeAccessory();
-				handler.obtainMessage(
-						what,
-						new USBAccessoryManagerMessage(
-								USBAccessoryManagerMessage.MessageType.DISCONNECTED))
+				USBAccessoryManager.this.handler
+						.obtainMessage(
+								USBAccessoryManager.this.what,
+								new USBAccessoryManagerMessage(
+										USBAccessoryManagerMessage.MessageType.DISCONNECTED))
 						.sendToTarget();
 			} else if (UsbManager.EXTRA_PERMISSION_GRANTED.equals(action)) {
 
@@ -722,47 +736,47 @@ public class USBAccessoryManager {
 	 * Closes the accessory and cleans up all lose ends
 	 * 
 	 */
-	private void closeAccessory() {
+	void closeAccessory() {
 
-		if (open == false) {
+		if (this.open == false) {
 			return;
 		}
 
-		open = false;
-		enabled = false;
-		permissionRequested = false;
+		this.open = false;
+		this.enabled = false;
+		this.permissionRequested = false;
 
-		if (readThread != null) {
-			readThread.cancel();
+		if (this.readThread != null) {
+			this.readThread.cancel();
 		}
 
-		if (outputStream != null) {
+		if (this.outputStream != null) {
 			try {
-				outputStream.close();
+				this.outputStream.close();
 			} catch (IOException e) {
 			}
 		}
 
-		if (parcelFileDescriptor != null) {
+		if (this.parcelFileDescriptor != null) {
 			try {
-				parcelFileDescriptor.close();
+				this.parcelFileDescriptor.close();
 			} catch (IOException e) {
 			}
 		}
 
-		outputStream = null;
+		this.outputStream = null;
 		// readThread = null;
-		parcelFileDescriptor = null;
+		this.parcelFileDescriptor = null;
 	}
 
 	public boolean isClosed() {
 		boolean isAlive;
 
-		if (readThread != null) {
-			isAlive = readThread.isAlive();
+		if (this.readThread != null) {
+			isAlive = this.readThread.isAlive();
 
 			if (isAlive == false) {
-				readThread = null;
+				this.readThread = null;
 			}
 
 			return isAlive;
@@ -782,8 +796,8 @@ public class USBAccessoryManager {
 		private ParcelFileDescriptor myparcelFileDescriptor;
 
 		public ReadThread(ParcelFileDescriptor p) {
-			myparcelFileDescriptor = p;
-			inputStream = new FileInputStream(p.getFileDescriptor());
+			this.myparcelFileDescriptor = p;
+			this.inputStream = new FileInputStream(p.getFileDescriptor());
 		}
 
 		@Override
@@ -791,10 +805,10 @@ public class USBAccessoryManager {
 			byte[] buffer = new byte[1024]; // buffer store for the stream
 			int bytes; // bytes returned from read()
 
-			while (continueRunning) {
+			while (this.continueRunning) {
 				try {
 					// Read from the InputStream
-					bytes = inputStream.read(buffer);
+					bytes = this.inputStream.read(buffer);
 
 					// Send the obtained bytes to the UI Activity
 					byte[] data = new byte[bytes];
@@ -804,17 +818,18 @@ public class USBAccessoryManager {
 					 * Synchronize to the readData object to make sure that no
 					 * user API is accessing it at the moment
 					 */
-					synchronized (readData) {
-						readData.add(data);
+					synchronized (USBAccessoryManager.this.readData) {
+						USBAccessoryManager.this.readData.add(data);
 					}
 
-					handler.obtainMessage(
-							what,
-							bytes,
-							-1,
-							new USBAccessoryManagerMessage(
-									USBAccessoryManagerMessage.MessageType.READ,
-									data)).sendToTarget();
+					USBAccessoryManager.this.handler
+							.obtainMessage(
+									USBAccessoryManager.this.what,
+									bytes,
+									-1,
+									new USBAccessoryManagerMessage(
+											USBAccessoryManagerMessage.MessageType.READ,
+											data)).sendToTarget();
 				} catch (IOException e) {
 					// Exiting read thread
 					break;
@@ -823,20 +838,19 @@ public class USBAccessoryManager {
 		}
 
 		public void cancel() {
-			continueRunning = false;
+			this.continueRunning = false;
 			try {
-				inputStream.close();
+				this.inputStream.close();
 			} catch (IOException e) {
 			}
 
 			try {
-				myparcelFileDescriptor.close();
+				this.myparcelFileDescriptor.close();
 			} catch (IOException e) {
 			}
 		}
 
 	}
-
 
 	/***********************************************************************/
 	/** Exception definition section **/
@@ -853,11 +867,12 @@ public class USBAccessoryManager {
 		String errorMessage;
 
 		public USBAccessoryManagerException(String message) {
-			errorMessage = message;
+			this.errorMessage = message;
 		}
 
+		@Override
 		public String toString() {
-			return errorMessage;
+			return this.errorMessage;
 		}
 	}
 }
