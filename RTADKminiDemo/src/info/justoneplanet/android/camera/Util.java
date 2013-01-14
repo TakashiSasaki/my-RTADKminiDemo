@@ -24,7 +24,7 @@ public class Util {
 			throws NullPointerException, IllegalArgumentException {
 		int size = width * height;
 		if (data == null) {
-			throw new NullPointerException("bufffer data is null");
+			throw new NullPointerException("buffer data is null");
 		}
 		if (data.length < size) {
 			throw new IllegalArgumentException("buffer data is illegal");

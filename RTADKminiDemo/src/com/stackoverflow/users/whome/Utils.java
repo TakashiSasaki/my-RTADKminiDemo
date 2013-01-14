@@ -120,7 +120,7 @@ public class Utils {
 	/**
 	 * Get IP address from first non-localhost interface
 	 * 
-	 * @param ipv4
+	 * @param useIPv4
 	 *            true=return ipv4, false=return ipv6
 	 * @return address or empty string
 	 * @throws SocketException

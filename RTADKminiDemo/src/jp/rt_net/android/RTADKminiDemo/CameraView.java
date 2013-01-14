@@ -70,9 +70,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 				CameraView.this.lastRgb565 = new int[CameraView.this.lastPreviewSize.width
 						* CameraView.this.lastPreviewSize.height];
 				CameraView.this.lastYuv420 = new byte[data.length];
-				for (int i = 0; i < data.length; ++i) {
-					CameraView.this.lastYuv420[i] = data[i];
-				}// for
+                System.arraycopy(data, 0, CameraView.this.lastYuv420, 0, data.length);
 
 				Yuv420ToRgb565.toRGB565(CameraView.this.lastYuv420,
 						CameraView.this.lastPreviewSize.width,
