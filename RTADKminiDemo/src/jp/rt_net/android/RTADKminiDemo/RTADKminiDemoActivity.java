@@ -167,7 +167,6 @@ public class RTADKminiDemoActivity extends Activity {
 				// item not to exist, lets catch any exceptions that might come.
 			}
 		}
-		Log.i("i", "bbb");
 		// Definition of SeekBar1
 		this.seekBar1 = (SeekBar) findViewById(R.id.seekBar1);
 		this.value_of_seekbar1 = (TextView) findViewById(R.id.TextView7);
