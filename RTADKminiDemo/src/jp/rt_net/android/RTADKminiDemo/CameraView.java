@@ -87,7 +87,8 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				bitmap.compress(CompressFormat.JPEG, 80, baos);
 				// bitmap.recycle();
-				CameraView.this.lastJpegByteArray = baos.toByteArray();
+				// CameraView.this.lastJpegByteArray = baos.toByteArray();
+				setLastJpegByteArray(baos.toByteArray());
 				camera1.setPreviewCallback(this);
 				CameraView.this.inCallBack = false;
 				// camera1.startPreview();
@@ -118,7 +119,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
 	synchronized void setLastJpegByteArray(byte[] jpeg_byte_array) {
 		this.lastJpegByteArray = jpeg_byte_array;
-	}
+	}// setLastJpegByteArray
 
 	synchronized public byte[] getLastJpegByteArray() {
 		return this.lastJpegByteArray;
