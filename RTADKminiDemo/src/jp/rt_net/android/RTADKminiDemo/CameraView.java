@@ -22,9 +22,12 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	protected Context context;
 	byte[] lastJpegByteArray;
 	Size lastPreviewSize;
+	boolean lastCompressionResult;
 	byte[] lastYuv420;
 	int[] lastRgb565;
 	volatile boolean inCallBack;
+	int width;
+	int height;
 
 	// コントラスタ
 	public CameraView(Context context, SurfaceView sv) {
@@ -85,7 +88,8 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 						CameraView.this.lastPreviewSize.width,
 						CameraView.this.lastPreviewSize.height, Config.RGB_565);
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				bitmap.compress(CompressFormat.JPEG, 80, baos);
+				CameraView.this.lastCompressionResult = bitmap.compress(
+						CompressFormat.JPEG, 80, baos);
 				// bitmap.recycle();
 				// CameraView.this.lastJpegByteArray = baos.toByteArray();
 				setLastJpegByteArray(baos.toByteArray());
@@ -124,6 +128,18 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	synchronized public byte[] getLastJpegByteArray() {
 		return this.lastJpegByteArray;
 	}// getLastJpegByteArray
+
+	synchronized public int getLastPreviewWidth() {
+		return this.lastPreviewSize.width;
+	}
+
+	synchronized public int getLastPreviewHeight() {
+		return this.lastPreviewSize.height;
+	}
+
+	synchronized public boolean getLastCompressionResult() {
+		return this.lastCompressionResult;
+	}
 
 	// カメラの切り替えをする時の処理
 	public void cameraChange() {

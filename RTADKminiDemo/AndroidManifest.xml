@@ -35,6 +35,7 @@
         <uses-library
             android:name="com.android.future.usb.accessory"
             android:required="true" />
+        <activity android:name="CameraViewTestActivity"></activity>
     </application>
 
 </manifest>
