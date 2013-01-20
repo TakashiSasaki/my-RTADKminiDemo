@@ -1,12 +1,16 @@
 package jp.rt_net.android.RTADKminiDemo;
 
 import java.io.IOException;
+import java.net.SocketException;
+
+import com.stackoverflow.users.whome.Utils;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.SurfaceView;
 import android.widget.ImageView;
 
@@ -33,6 +37,14 @@ public class CameraViewTestActivity extends Activity {
 			this.httpServerThread = new HttpServerThread(this.mCameraView);
 			this.httpServerThread.start();
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			String x = Utils.getIPAddress(true);
+			Log.v(CameraViewTestActivity.class.toString(), x);
+			setTitle(x);
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
