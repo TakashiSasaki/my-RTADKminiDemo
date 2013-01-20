@@ -1,5 +1,7 @@
 package jp.rt_net.android.RTADKminiDemo;
 
+import java.io.IOException;
+
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +16,7 @@ public class CameraViewTestActivity extends Activity {
 	private CameraView mCameraView;
 	private ImageView mImageView;
 	ShowJpegImageThread showJpegImageThread;
+	HttpServerThread httpServerThread;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +28,16 @@ public class CameraViewTestActivity extends Activity {
 		this.showJpegImageThread = new ShowJpegImageThread(this.mImageView,
 				this.mCameraView, new Handler());
 		this.showJpegImageThread.start();
+
+		try {
+			this.httpServerThread = new HttpServerThread(this.mCameraView);
+			this.httpServerThread.start();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public CameraView getCameraView(){
+	public CameraView getCameraView() {
 		return this.mCameraView;
 	}
 }// CameraViewTest
@@ -38,7 +48,8 @@ class ShowJpegImageThread extends Thread {
 	CameraView cameraView;
 	Handler handler;
 
-	public ShowJpegImageThread(ImageView image_view, CameraView camera_view, Handler handler) {
+	public ShowJpegImageThread(ImageView image_view, CameraView camera_view,
+			Handler handler) {
 		this.imageView = image_view;
 		this.cameraView = camera_view;
 		this.handler = handler;

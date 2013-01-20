@@ -131,7 +131,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	}// surfaceDestroyed
 
 	synchronized public byte[] getLastJpegByteArray() {
-		if(lastYuvImage == null) {
+		if(this.lastYuvImage == null) {
 			return null;
 		}
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
