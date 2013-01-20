@@ -116,7 +116,11 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		this.camera = null;
 	}// surfaceDestroyed
 
-	public byte[] getLastJpegByteArray() {
+	synchronized void setLastJpegByteArray(byte[] jpeg_byte_array) {
+		this.lastJpegByteArray = jpeg_byte_array;
+	}
+
+	synchronized public byte[] getLastJpegByteArray() {
 		return this.lastJpegByteArray;
 	}// getLastJpegByteArray
 
