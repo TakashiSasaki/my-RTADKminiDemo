@@ -34,7 +34,8 @@ public class CameraViewTestActivity extends Activity {
 		this.showJpegImageThread.start();
 
 		try {
-			this.httpServerThread = new HttpServerThread(this.mCameraView);
+			this.httpServerThread = new HttpServerThread(this.mCameraView,
+					getAssets());
 			this.httpServerThread.start();
 		} catch (IOException e) {
 			e.printStackTrace();

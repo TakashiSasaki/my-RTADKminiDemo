@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<div>カメラ画像！</div>
+<input id="ip_address" value="192.168.0.5"/>
+<div><img id="jpeg1" src=""/></div>
+<script type="text/javascript">
+    function reloadImage(z){
+        var input_element = document.getElementById("ip_address");
+        var ip_address = input_element.value;
+        var d = new Date();
+        var url = "http://" + ip_address +":12346/" + d.getTime() + ".jpg";
+        var img_element = document.getElementById("jpeg1");
+        img_element.setAttribute("src", url);
+    }
+ 
+    function reloadImageContinuously(){
+        reloadImage();
+        setTimeout(reloadImageContinuously, 1000);
+    }
+    reloadImageContinuously();
+</script>
+</body>
+</html>
