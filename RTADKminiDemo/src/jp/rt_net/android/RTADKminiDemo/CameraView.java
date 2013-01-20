@@ -1,13 +1,17 @@
 package jp.rt_net.android.RTADKminiDemo;
 
 import java.io.ByteArrayOutputStream;
+import java.security.acl.LastOwnerException;
 
 import com.tomgibara.blog.Yuv420ToRgb565.Yuv420ToRgb565;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.ImageFormat;
+import android.graphics.Rect;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Bitmap.Config;
+import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
 import android.view.SurfaceHolder;
@@ -20,11 +24,11 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	private SurfaceHolder holder; // ホルダ
 	Camera camera; // カメラ
 	protected Context context;
-	byte[] lastJpegByteArray;
 	Size lastPreviewSize;
 	boolean lastCompressionResult;
-	byte[] lastYuv420;
-	int[] lastRgb565;
+	byte[] lastPreviewData;
+	YuvImage lastYuvImage;
+	// int[] lastRgb565;
 	volatile boolean inCallBack;
 	int width;
 	int height;
@@ -70,29 +74,34 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
 				CameraView.this.lastPreviewSize = camera1.getParameters()
 						.getPreviewSize();
-				CameraView.this.lastRgb565 = new int[CameraView.this.lastPreviewSize.width
-						* CameraView.this.lastPreviewSize.height];
-				CameraView.this.lastYuv420 = new byte[data.length];
-				System.arraycopy(data, 0, CameraView.this.lastYuv420, 0,
+				CameraView.this.lastPreviewData = new byte[data.length];
+				System.arraycopy(data, 0, CameraView.this.lastPreviewData, 0,
 						data.length);
 
-				Yuv420ToRgb565.toRGB565(CameraView.this.lastYuv420,
+				CameraView.this.lastYuvImage = new YuvImage(
+						CameraView.this.lastPreviewData, ImageFormat.NV21,
 						CameraView.this.lastPreviewSize.width,
-						CameraView.this.lastPreviewSize.height,
-						CameraView.this.lastRgb565);
-				// int[] rgb_array = Util.decodeYUV(data,
-				// CameraView.this.lastPreviewSize.width,
-				// CameraView.this.lastPreviewSize.height);
+						CameraView.this.lastPreviewSize.height, null);
 
-				Bitmap bitmap = Bitmap.createBitmap(CameraView.this.lastRgb565,
-						CameraView.this.lastPreviewSize.width,
-						CameraView.this.lastPreviewSize.height, Config.RGB_565);
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				CameraView.this.lastCompressionResult = bitmap.compress(
-						CompressFormat.JPEG, 80, baos);
-				// bitmap.recycle();
-				// CameraView.this.lastJpegByteArray = baos.toByteArray();
-				setLastJpegByteArray(baos.toByteArray());
+				/*
+				 * CameraView.this.lastRgb565 = new
+				 * int[CameraView.this.lastPreviewSize.width
+				 * CameraView.this.lastPreviewSize.height];
+				 * Yuv420ToRgb565.toRGB565(CameraView.this.lastPreviewData,
+				 * CameraView.this.lastPreviewSize.width,
+				 * CameraView.this.lastPreviewSize.height,
+				 * CameraView.this.lastRgb565);
+				 * 
+				 * Bitmap bitmap =
+				 * Bitmap.createBitmap(CameraView.this.lastRgb565,
+				 * CameraView.this.lastPreviewSize.width,
+				 * CameraView.this.lastPreviewSize.height, Config.RGB_565);
+				 * ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				 * CameraView.this.lastCompressionResult = bitmap.compress(
+				 * CompressFormat.JPEG, 80, baos);
+				 * CameraView.this.lastJpegByteArray = baos.toByteArray();
+				 * setLastJpegByteArray(baos.toByteArray());
+				 */
 				camera1.setPreviewCallback(this);
 				CameraView.this.inCallBack = false;
 				// camera1.startPreview();
@@ -121,12 +130,15 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		this.camera = null;
 	}// surfaceDestroyed
 
-	synchronized void setLastJpegByteArray(byte[] jpeg_byte_array) {
-		this.lastJpegByteArray = jpeg_byte_array;
-	}// setLastJpegByteArray
-
 	synchronized public byte[] getLastJpegByteArray() {
-		return this.lastJpegByteArray;
+		if(lastYuvImage == null) {
+			return null;
+		}
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		this.lastCompressionResult = this.lastYuvImage.compressToJpeg(new Rect(
+				0, 0, this.lastPreviewSize.width, this.lastPreviewSize.height),
+				80, baos);
+		return baos.toByteArray();
 	}// getLastJpegByteArray
 
 	synchronized public int getLastPreviewWidth() {
@@ -169,12 +181,12 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	public boolean isYuv422() {
 		final int n_bytes_from_size = this.lastPreviewSize.height
 				* this.lastPreviewSize.width * 2;
-		return this.lastYuv420.length == n_bytes_from_size;
+		return this.lastPreviewData.length == n_bytes_from_size;
 	}
 
 	public boolean isYuv420() {
 		final int n_bytes_from_size = this.lastPreviewSize.height
 				* this.lastPreviewSize.width / 2 * 3;
-		return this.lastYuv420.length == n_bytes_from_size;
+		return this.lastPreviewData.length == n_bytes_from_size;
 	}
 }// CameraView

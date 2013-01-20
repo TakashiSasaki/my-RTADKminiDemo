@@ -15,7 +15,7 @@ public class CameraViewTestActivityTestCase extends
 				//
 			}
 		});
-		Thread.sleep(6000);
+		Thread.sleep(10000);
 		assertTrue(this.cameraViewTestActivity.getCameraView()
 				.getLastCompressionResult());
 	}
