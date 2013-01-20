@@ -1,16 +1,9 @@
 package jp.rt_net.android.RTADKminiDemo;
 
 import java.io.ByteArrayOutputStream;
-import java.security.acl.LastOwnerException;
-
-import com.tomgibara.blog.Yuv420ToRgb565.Yuv420ToRgb565;
-
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
 import android.graphics.Rect;
-import android.graphics.Bitmap.CompressFormat;
-import android.graphics.Bitmap.Config;
 import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;

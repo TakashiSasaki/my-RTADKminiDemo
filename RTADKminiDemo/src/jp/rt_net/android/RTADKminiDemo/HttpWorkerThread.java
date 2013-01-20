@@ -1,10 +1,12 @@
 package jp.rt_net.android.RTADKminiDemo;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -114,6 +116,7 @@ public class HttpWorkerThread extends Thread {
 			return;
 		} else if (http_request_path.matches("/[0-9]+.jpg")) {
 			byte[] jpeg_byte_array = this.cameraView.getLastJpegByteArray();
+			if (jpeg_byte_array == null) return;
 			PrintWriter print_writer = new PrintWriter(this.outputStream);
 			print_writer.print("HTTP/1.1 200 OK\r\n");
 			print_writer.print("Connection: close\r\n");
@@ -136,33 +139,34 @@ public class HttpWorkerThread extends Thread {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}// try
+			return;
 		} else if (http_request_path.equals("/camera.html")) {
 			try {
 				InputStream input_stream = this.assetManager
-						.open("/camera.html");
-				StringBuffer string_buffer = new StringBuffer();
+						.open("camera.html");
+				ByteArrayOutputStream byte_array_output_stream = new ByteArrayOutputStream();
 				while (true) {
 					byte[] asset_buffer = new byte[2048];
 					int count = input_stream.read(asset_buffer);
-					if (count == 0)
+					if (count < 0)
 						break;
-					string_buffer.append(asset_buffer);
+					byte_array_output_stream.write(asset_buffer, 0, count);
 				}// while
-				String html_string = string_buffer.toString();
-				byte[] html_utf8_bytes = html_string.getBytes();
+				byte[] html_byte_array = byte_array_output_stream.toByteArray();
 				PrintWriter print_writer = new PrintWriter(this.outputStream);
 				print_writer.print("HTTP/1.1 200 OK\r\n");
 				print_writer.print("Connection: close\r\n");
-				print_writer.print("Content-Length: " + html_utf8_bytes.length
+				print_writer.print("Content-Length: " + html_byte_array.length
 						+ "\r\n");
 				print_writer.print("Content-Type: text/html\r\n\r\n");
 				print_writer.flush();
-				outputStream.write(html_utf8_bytes);
-				outputStream.flush();
-				outputStream.close();
+				this.outputStream.write(html_byte_array);
+				this.outputStream.flush();
+				this.outputStream.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}// try
+			return;
 		}// if
 	}// run
 }// HttpWorkerThread

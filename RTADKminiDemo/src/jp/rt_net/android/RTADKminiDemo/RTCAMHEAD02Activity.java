@@ -1,6 +1,9 @@
 package jp.rt_net.android.RTADKminiDemo;
 
 import java.io.IOException;
+import java.net.SocketException;
+
+import com.stackoverflow.users.whome.Utils;
 
 import jp.rt_net.android.RTADKminiDemo.R;
 
@@ -8,6 +11,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -50,7 +54,7 @@ public class RTCAMHEAD02Activity extends Activity {
 	private Button button1, button2;
 
 	// network thread
-	HelloServerThread helloServerThread;
+	HttpServerThread httpServerThread;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -172,19 +176,30 @@ public class RTCAMHEAD02Activity extends Activity {
 		});
 
 		try {
-			this.helloServerThread = new HelloServerThread();
-			this.helloServerThread.start();
+			this.httpServerThread = new HttpServerThread(this.mCameraView,
+					getAssets());
+			this.httpServerThread.start();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}// try
 
 	}// onCreate
 
 	@Override
 	public void onStart() {
 		super.onStart();
-		this.setTitle("RT-ADKmini デバイスが接続されていません");
+		String url = "";
+		try {
+			url = getUrl();
+		} catch (SocketException e1) {
+			e1.printStackTrace();
+		}
+		this.setTitle(url + " RT-ADKmini デバイスが接続されていません");
+	}// onStart
 
+	static String getUrl() throws SocketException {
+		String ip_address = Utils.getIPAddress(true);
+		return "http://" + ip_address + ":12346/camera.html";
 	}
 
 	@Override
@@ -202,7 +217,13 @@ public class RTCAMHEAD02Activity extends Activity {
 
 	// RT-ADKminiが未接続時に呼ばれる
 	public void disconnectAccessory() {
-		this.setTitle("RT-ADKmini デバイスが接続されていません");
+		String url = "";
+		try {
+			url = getUrl();
+		} catch (SocketException e1) {
+			e1.printStackTrace();
+		}
+		this.setTitle(url + " RT-ADKmini デバイスが接続されていません");
 	}
 
 	/******* USB Manager thread　または　UIからの　messageを受け取り処理するhandler *******/
@@ -288,7 +309,13 @@ public class RTCAMHEAD02Activity extends Activity {
 				case CONNECTED:
 					break;
 				case READY:
-					setTitle("RT-ADKmini デバイスが接続されました");
+					String url = "";
+					try {
+						url = getUrl();
+					} catch (SocketException e) {
+						e.printStackTrace();
+					}
+					setTitle(url + " RT-ADKmini デバイスが接続されました");
 					break;
 				case DISCONNECTED:
 					disconnectAccessory();
